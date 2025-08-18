@@ -1,0 +1,8 @@
+services:
+  node-typescrip:
+    image: node-typescript:prod
+    build:
+      context: .
+      target: production
+    ports:
+      - "5000:5000"

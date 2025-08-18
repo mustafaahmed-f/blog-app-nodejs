@@ -1,0 +1,13 @@
+services:
+  node-typescrip:
+    container_name: node-typescript
+    environment:
+      - PORT=5000
+    env_file:
+      - ./.env
+
+networks:
+  node-typesript-network:
+
+volumes:
+  node-typescript-volume:

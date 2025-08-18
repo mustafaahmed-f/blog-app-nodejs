@@ -1,0 +1,6 @@
+services:
+  node-typescrip:
+    image: node-typescript:build
+    build:
+      context: .
+      target: builder
