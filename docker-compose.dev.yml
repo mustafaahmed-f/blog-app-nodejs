@@ -1,8 +1,19 @@
 services:
-  node-typescrip:
-    image: node-typescript:dev
+  node-prisma:
+    # container_name: node-prisma
     build:
       context: .
       target: development
+    # env_file:
+    #   - ./.env
+    image: node-prisma:dev
     ports:
-      - "5000:5000"
+      - "5001:5001"
+    volumes:
+      - .:/app
+      - /app/node_modules # prevents node_modules overwrite.
+    command: npm run local:watch
+    environment:
+      - debug=true
+    networks:
+      - node-prisma-network

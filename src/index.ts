@@ -1,9 +1,9 @@
+import dotenv from "dotenv";
 import express from "express";
-const app = express();
+import { initiateApp } from "./initiateApp.js";
+import { Application } from "express";
+dotenv.config();
 
-app.use(express.json());
-app.get("/", (req, res) => res.send("Hello world !!"));
+const app: Application = express();
 
-app.listen(5000, () => console.log("Server is running on port 5000"));
-
-console.log("Running ...... ");
+initiateApp(app);

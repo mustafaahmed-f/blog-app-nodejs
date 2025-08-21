@@ -1,6 +1,6 @@
 services:
-  node-typescrip:
-    image: node-typescript:prod
+  node-prisma:
+    image: node-prisma:prod
     build:
       context: .
       target: production

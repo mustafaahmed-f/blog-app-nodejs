@@ -5,5 +5,7 @@
   "execMap": {
     "ts": "ts-node --esm"
   },
-  "ext": "js,json,ts"
+  "ext": "js,json,ts",
+  "exec": "node --loader ts-node/esm src/index.ts",
+  "legacyWatch": true
 }

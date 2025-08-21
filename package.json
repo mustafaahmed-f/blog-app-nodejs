@@ -10,19 +10,26 @@
     "prod": "node dist/index.js",
     "dev": "node --loader ts-node/esm src/index.ts",
     "local:watch": "nodemon --watch src --ext ts --exec \"node --loader ts-node/esm src/index.ts\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "commit": "node --loader ts-node/esm scripts/generate-commit.ts"
   },
   "keywords": [],
   "author": "sezRR",
   "license": "ISC",
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
+    "@types/morgan": "^1.9.10",
     "@types/node": "^20.4.7",
     "nodemon": "^3.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.1.6"
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "@prisma/client": "^6.14.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "morgan": "^1.10.1"
   }
 }

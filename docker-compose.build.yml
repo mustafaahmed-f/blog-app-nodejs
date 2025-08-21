@@ -1,6 +1,6 @@
 services:
-  node-typescrip:
-    image: node-typescript:build
+  node-prisma:
+    image: node-prisma:build
     build:
       context: .
       target: builder

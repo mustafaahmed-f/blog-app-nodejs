@@ -1,13 +1,50 @@
 services:
-  node-typescrip:
-    container_name: node-typescript
-    environment:
-      - PORT=5000
+  node-prisma:
+    container_name: node-prisma
     env_file:
       - ./.env
+    networks:
+      - node-prisma-network
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql
+    container_name: my-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: mypassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - node-prisma-network
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: my-phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: mypassword
+    networks:
+      - node-prisma-network
 
 networks:
-  node-typesript-network:
+  node-prisma-network:
 
 volumes:
-  node-typescript-volume:
+  node-prisma-volume:
+  mysql_data:
+# =======================================================================================
+# ============================== Commands ===============================================
+# =======================================================================================
+
+# docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+# docker-compose -f docker-compose.yml -f docker-compose.dev.yml down
+# docker exec -it node-prisma bash
+# docker logs node-prisma -f

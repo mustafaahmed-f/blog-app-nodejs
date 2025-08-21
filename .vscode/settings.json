@@ -14,5 +14,7 @@
     "tab.activeBorder": "#bc95e2",
     "iLoveWorkSpaceColors": true,
     "iLoveWorkSpaceRandom": false
-  }
+  },
+  "javascript.preferences.importModuleSpecifierEnding": "js",
+  "typescript.preferences.importModuleSpecifierEnding": "js"
 }
