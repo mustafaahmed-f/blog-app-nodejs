@@ -1,73 +1,72 @@
-# Node.js with TypeScript Template
+# Node.js TypeScript Prisma Learning App
 
-This repository serves as a template for setting up a Node.js project with TypeScript. It includes configuration files for `tsconfig.json`, `package.json`, and `nodemon.json` to help users get started quickly.
+This project is a Node.js application written in TypeScript, created to learn and experiment with [Prisma](https://www.prisma.io/). The app is fully dockerized for easy setup and deployment.
+
+## Features
+
+- Node.js + TypeScript backend
+- Uses Prisma ORM for database access
+- Fully dockerized (see Docker files for details)
+- Express server with CORS and logging (Morgan)
+- Environment variable management with dotenv
+
+## Used Libraries
+
+### Dependencies
+
+- `@prisma/client`
+- `cors`
+- `dotenv`
+- `express`
+- `morgan`
+
+### Dev Dependencies
+
+- `@types/cors`
+- `@types/express`
+- `@types/morgan`
+- `@types/node`
+- `nodemon`
+- `ts-node`
+- `typescript`
 
 ## Getting Started
 
-### Prerequisites
-
-Make sure you have [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed on your machine.
-
-### Installation
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/your-username/nodejs-typescript-template.git
-   ```
-
-2. Navigate to the project directory:
-  
-   ```bash
-   cd nodejs-typescript-template
-   ```
-
-3. Install dependencies:
-
+1. **Clone the repository**
+2. **Install dependencies**
    ```bash
    npm install
    ```
-
-## Usage
-
-### Development
-
-To run the project in development mode with automatic code reloading, use:
-
-   ```bash
-   npm run dev
-   ```
-
-This command uses [nodemon](https://nodemon.io/) to watch for changes in the `src/` directory and restarts the server accordingly.
-
-### Build
-
-To build the TypeScript source code, use:
-
+3. **Build the project**
    ```bash
    npm run build
    ```
-
-This command compiles TypeScript files from the `src/` directory to the `dist/` directory.
-
-### Production
-
-To run the built application in production, use:
-
+4. **Run in development mode**
    ```bash
-   npm run prod
+   npm run dev
    ```
+5. **Run with Docker**
+   - Build and start containers using Docker Compose:
+     ```bash
+     docker-compose -f docker-compose.yml -f [optional-docker-compose-file (may be .dev.yml , .prod.yml or .build.yml according to target environment)] up -d --build
+     ```
 
-This command executes the compiled `index.js` file from the `dist/` directory.
+## Scripts
 
-## Project Structure
+- `build`: Compile TypeScript to JavaScript
+- `dev`: Run in development mode with ts-node
+- `prod`: Run compiled code
+- `local:watch`: Watch for changes and restart automatically
 
-- `src/`: Contains the source code of the application.
-    
-    - `index.ts`: Main entry point of the application.
-    - `helloWorld.ts`: Example module demonstrating TypeScript functionality.
+## License
+
+ISC
+
+---
+
+This app is for learning and experimenting with Prisma in a Node.js + TypeScript environment. - `index.ts`: Main entry point of the application. - `helloWorld.ts`: Example module demonstrating TypeScript functionality.
+
 - `dist/`: Output directory where the compiled JavaScript files are stored.
-    
 
 ## Configuration Files
 
