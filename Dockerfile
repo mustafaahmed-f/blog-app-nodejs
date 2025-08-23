@@ -1,6 +1,6 @@
-FROM node:22.16.0 as base
+FROM node:22.16.0 AS base
 
-From base as development
+FROM base AS development
 
 WORKDIR /app
 COPY package*.json .
@@ -11,7 +11,7 @@ RUN npx prisma generate
 CMD ["npm","run","local:watch"]
 EXPOSE 3000
 
-From base as builder
+FROM base AS builder
 
 COPY package.json package-lock.json* ./
 RUN npm install
@@ -21,7 +21,7 @@ RUN npx prisma generate
 # Remove dev dependencies to slim the build before copying
 RUN npm prune --production
 
-From node:22.16.0-alpine as production
+FROM node:22.16.0-alpine AS production
 
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package*.json ./
