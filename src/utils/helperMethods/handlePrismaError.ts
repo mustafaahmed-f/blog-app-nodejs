@@ -1,7 +1,7 @@
-import { prisma } from "../../services/prismaClient.js";
+import { Prisma } from "@prisma/client";
 
 export function handlePrismaError(error: any) {
-  if (error instanceof prisma.PrismaClientKnownRequestError) {
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
     switch (error.code) {
       case "P2002":
         return {
@@ -28,7 +28,7 @@ export function handlePrismaError(error: any) {
     }
   }
 
-  if (error instanceof prisma.PrismaClientValidationError) {
+  if (error instanceof Prisma.PrismaClientValidationError) {
     return { status: 400, message: "Invalid input data" };
   }
 

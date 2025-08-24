@@ -1,12 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -14,31 +7,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User{
-  id Int @id @default(autoincrement())
+model User {
+  id        Int    @id @default(autoincrement())
   firstName String
-  lastName String
-  userName String @unique
-  email String @unique
-  password String
-  posts Post[]
+  lastName  String
+  userName  String @unique
+  email     String @unique
+  password  String
+  posts     Post[]
 }
 
-model Post{
-  id Int @id @default(autoincrement())
-  title String
-  desc String
+model Post {
+  id         Int        @id @default(autoincrement())
+  title      String
+  desc       String
   mainImgURL String
-  author User @relation(fields: [author_id],references: [id])
-  author_id Int
+  author     User       @relation(fields: [author_id], references: [id])
+  author_id  Int
   categories Category[]
 
-  @@unique([author_id,title])
+  @@unique([author_id, title])
   @@index([author_id])
 }
 
-model Category{
-  id Int @id @default(autoincrement())
-  name String @unique
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
   posts Post[]
 }
