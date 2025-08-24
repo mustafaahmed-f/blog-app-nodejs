@@ -73,3 +73,35 @@ This app is for learning and experimenting with Prisma in a Node.js + TypeScript
 - `tsconfig.json`: TypeScript compiler configuration.
 - `package.json`: Project metadata and script definitions.
 - `nodemon.json`: Nodemon configuration for development.
+
+## Folder structure
+
+```
+src
+├─ middlewares/             # global middleware (auth, error handling, logging)
+├─ types/                   # global TypeScript types/interfaces
+├─ utils/                   # global utilities
+│   ├─ constants/
+│   └─ helpers/
+├─ services/                # global services (e.g., email, S3, external APIs)
+├─ modules/                 # feature-based organization
+│   ├─ posts/               # example module
+│   │   ├─ controllers/     # request handlers (one file per route)
+│   │   ├─ services/        # business logic for posts
+│   │   ├─ validations/     # Zod/Yup/Joi schemas for posts
+│   │   ├─ types/           # types specific to posts
+│   │   ├─ utils/           # utils specific to posts
+│   │   ├─ posts.router.ts  # routes for posts
+│   ├─ users/               # another module, same structure
+│   │   ├─ controllers/
+│   │   ├─ services/
+│   │   ├─ validations/
+│   │   ├─ types/
+│   │   ├─ utils/
+│   │   ├─ users.router.ts
+│   └─ index.ts             # export all routers from modules
+├─ routers.ts               # combines all routers in app
+├─ initiateApp.ts           # app initialization (middlewares, routers, etc.)
+└─ index.ts                 # entry point
+
+```

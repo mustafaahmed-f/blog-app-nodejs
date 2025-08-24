@@ -1,9 +1,8 @@
 import { Router } from "express";
+import { getPosts } from "./controllers/getPosts.js";
 
 const router: Router = Router();
 
-router.get("/", (req, res) => {
-  res.json({ message: "All posts" });
-});
+router.get("/getPosts", getPosts);
 
 export default router;

@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { getErrorJson } from "./helperMethods/errorJson.js";
 
 export const globalErrorHandler = (
   err: any,
@@ -13,6 +14,6 @@ export const globalErrorHandler = (
         Error: (req as any).validationErrorArr,
       });
     }
-    return res.status(err.cause || 400).json({ errMsg: err.message });
+    return res.status(err.cause || 400).json(getErrorJson(err.message));
   }
 };
