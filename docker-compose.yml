@@ -1,10 +1,10 @@
 services:
-  node-prisma:
-    container_name: node-prisma
+  blog-app:
+    container_name: blog-app
     env_file:
       - ./.env
     networks:
-      - node-prisma-network
+      - blog-app-network
     depends_on:
       - mysql
 
@@ -19,7 +19,7 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
-      - node-prisma-network
+      - blog-app-network
 
   phpmyadmin:
     image: phpmyadmin:latest
@@ -32,13 +32,13 @@ services:
       PMA_USER: root
       PMA_PASSWORD: mypassword
     networks:
-      - node-prisma-network
+      - blog-app-network
 
 networks:
-  node-prisma-network:
+  blog-app-network:
 
 volumes:
-  node-prisma-volume:
+  blog-app-volume:
   mysql_data:
 # =======================================================================================
 # ============================== Commands ===============================================
@@ -46,5 +46,5 @@ volumes:
 
 # docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
 # docker-compose -f docker-compose.yml -f docker-compose.dev.yml down
-# docker exec -it node-prisma bash
-# docker logs node-prisma -f
+# docker exec -it blog-app bash
+# docker logs blog-app -f

@@ -1,6 +1,6 @@
 services:
-  node-prisma:
-    image: node-prisma:prod
+  blog-app:
+    image: blog-app:prod
     build:
       context: .
       target: production

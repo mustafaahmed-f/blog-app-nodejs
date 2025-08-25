@@ -1,12 +1,12 @@
 services:
-  node-prisma:
-    # container_name: node-prisma
+  blog-app:
+    # container_name: blog-app
     build:
       context: .
       target: development
     # env_file:
     #   - ./.env
-    image: node-prisma:dev
+    image: blog-app:dev
     ports:
       - "5001:5001"
     volumes:
@@ -16,4 +16,4 @@ services:
     environment:
       - debug=true
     networks:
-      - node-prisma-network
+      - blog-app-network

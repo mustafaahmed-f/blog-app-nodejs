@@ -1,1 +1,1 @@
-export const MainAppName = "prisma-node";
+export const MainAppName = "blogapp";

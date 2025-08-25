@@ -1,6 +1,6 @@
 services:
-  node-prisma:
-    image: node-prisma:build
+  blog-app:
+    image: blog-app:build
     build:
       context: .
       target: builder
