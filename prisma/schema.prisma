@@ -7,31 +7,71 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
 model User {
-  id        Int    @id @default(autoincrement())
+  id        String    @id @default(cuid())
   firstName String
   lastName  String
-  userName  String @unique
-  email     String @unique
+  userName  String    @unique
+  email     String    @unique
   password  String
   posts     Post[]
+  Account   Account[]
+  Comment   Comment[]
 }
 
 model Post {
-  id         Int        @id @default(autoincrement())
+  id         String    @id @default(cuid()) @map("_id")
+  createdAt  DateTime  @default(now())
+  slug       String    @unique
   title      String
   desc       String
-  mainImgURL String
-  author     User       @relation(fields: [author_id], references: [id])
-  author_id  Int
-  categories Category[]
+  img        String?
+  views      Int       @default(0)
+  categoryId String
+  cat        Category  @relation(fields: [categoryId], references: [id])
+  userEmail  String
+  user       User      @relation(fields: [userEmail], references: [email])
+  comments   Comment[]
 
-  @@unique([author_id, title])
-  @@index([author_id])
+  @@index([userEmail])
+  @@index([categoryId])
+}
+
+model Comment {
+  id        String   @id @default(cuid()) @map("_id")
+  createdAt DateTime @default(now())
+  desc      String
+  userEmail String
+  user      User     @relation(fields: [userEmail], references: [email])
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id])
+
+  @@index([postId])
 }
 
 model Category {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
-  posts Post[]
+  id    String  @id @default(cuid())
+  slug  String  @unique
+  title String
+  img   String?
+  Posts Post[]
 }
