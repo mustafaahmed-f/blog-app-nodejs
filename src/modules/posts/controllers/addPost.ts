@@ -9,41 +9,67 @@ import { getErrorMsg } from "../../../utils/helperMethods/generateErrorMsg.js";
 type newPost = z.infer<typeof addPostSchema>;
 
 export async function addPost(req: Request, res: Response, next: NextFunction) {
-  const newPost: newPost = req.body;
-  // console.log("newPost", newPost);
-  //// Check if same user has prev. post with the same title:
-  //Todo : use email add from req.user after using clerk:
-  const userEmail = "mostafa@gmail.com";
-  const checkPostExistence = await prisma.post.findFirst({
-    where: {
-      AND: [
-        {
-          title: {
-            equals: newPost.title,
+  try {
+    const newPost: newPost = req.body;
+    const tagsArr = newPost.tags
+      .split(",")
+      .map((tag) => tag.trim().toLowerCase());
+    // console.log("newPost", newPost);
+    //// Check if same user has prev. post with the same title:
+    //Todo : use email add from req.user after using clerk:
+    const userEmail = "mostafa@gmail.com";
+    const checkPostExistence = await prisma.post.findFirst({
+      where: {
+        AND: [
+          {
+            title: {
+              equals: newPost.title,
+            },
+            userEmail: {
+              equals: userEmail,
+            },
           },
-          userEmail: {
-            equals: userEmail,
+        ],
+      },
+    });
+
+    if (checkPostExistence)
+      return next(new Error("User can't add multiple posts with same title."));
+
+    //TODO: check category existence
+
+    const slug = newPost.title.trim().split(" ").join("-");
+
+    const result = await prisma.post.create({
+      data: {
+        ...newPost,
+        slug: slug,
+        userEmail,
+        tags: {
+          connectOrCreate: tagsArr.map((tag) => {
+            return {
+              where: {
+                name: tag,
+              },
+              create: {
+                name: tag,
+              },
+            };
+          }),
+        },
+      },
+      omit: {
+        id: true,
+      },
+      include: {
+        tags: {
+          omit: {
+            id: true,
           },
         },
-      ],
-    },
-  });
+      },
+    });
 
-  if (checkPostExistence)
-    return next(new Error("User can't add multiple posts with same title."));
-
-  //TODO: check category existence
-
-  const slug = newPost.title.trim().split(" ").join("-");
-
-  const result = await prisma.post.create({
-    data: { ...newPost, slug: slug, userEmail },
-    omit: {
-      id: true,
-    },
-  });
-
-  try {
     return res.json(
       getJsonResponse({
         message: getSuccessMsg("Post", "has", "created"),
