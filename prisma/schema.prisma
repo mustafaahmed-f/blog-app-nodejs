@@ -28,6 +28,8 @@ model Account {
 
 model User {
   id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
   firstName String
   lastName  String
   userName  String    @unique
@@ -39,9 +41,10 @@ model User {
 }
 
 model Post {
-  id        String   @id @default(cuid()) @map("_id")
-  createdAt DateTime @default(now())
-
+  id         String    @id @default(cuid()) @map("_id")
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now())
+  isEdited   Boolean   @default(false)
   slug       String    @unique
   title      String
   desc       String
@@ -62,21 +65,25 @@ model Post {
 model Comment {
   id        String   @id @default(cuid()) @map("_id")
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  isEdited  Boolean  @default(false)
   desc      String
   userEmail String
   user      User     @relation(fields: [userEmail], references: [email])
-  postId    String
-  post      Post     @relation(fields: [postId], references: [id])
+  postSlug  String
+  post      Post     @relation(fields: [postSlug], references: [slug])
 
-  @@index([postId])
+  @@index([postSlug])
 }
 
 model Category {
-  id    String  @id @default(cuid())
-  slug  String  @unique
-  title String
-  img   String?
-  Posts Post[]
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  slug      String   @unique
+  title     String
+  img       String?
+  Posts     Post[]
 }
 
 model Tag {

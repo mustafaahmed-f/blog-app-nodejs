@@ -17,18 +17,6 @@ export async function updatePost(
   try {
     const post: updatedPost = req.body;
     const postSlug = req.params.slug;
-    const checkPostExistence = await prisma.post.findUnique({
-      where: {
-        slug: postSlug,
-      },
-      include: {
-        tags: {
-          omit: {
-            id: true,
-          },
-        },
-      },
-    });
 
     let tagsArr: any = null;
     let newSlug: string | null = null;
@@ -62,6 +50,8 @@ export async function updatePost(
       data: {
         ...post,
         slug: newSlug ? newSlug : undefined,
+        updatedAt: new Date(),
+        isEdited: true,
         tags: !tagsArr
           ? undefined
           : {
