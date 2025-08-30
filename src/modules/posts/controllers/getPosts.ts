@@ -1,10 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { pagination } from "../../../utils/helperMethods/pagination.js";
 import { prisma } from "../../../services/prismaClient.js";
 import { getErrorMsg } from "../../../utils/helperMethods/generateErrorMsg.js";
-import { errMsgs } from "../../../utils/constants/ErrorMsgs.js";
-import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
 import { getSuccessMsg } from "../../../utils/helperMethods/generateSuccessMsg.js";
+import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
+import { pagination } from "../../../utils/helperMethods/pagination.js";
 
 export async function getPosts(
   req: Request,

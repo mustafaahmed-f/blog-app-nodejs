@@ -6,5 +6,7 @@ export function getSuccessMsg(
   verb: "have" | "has",
   action: ActionsType
 ) {
-  return `${module}${verb === "have" ? "s" : ""} ${verb} been ${action}`;
+  return `${module}${
+    verb === "have" ? "s" : ""
+  } ${verb} been ${action} successfully !!`;
 }

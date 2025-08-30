@@ -8,14 +8,14 @@ datasource db {
 }
 
 model Account {
-  id                String  @id @default(cuid())
+  id                String    @id @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
   refresh_token     String?
   access_token      String?
-  expires_at        Int?
+  expires_at        DateTime?
   token_type        String?
   scope             String?
   id_token          String?
@@ -53,6 +53,7 @@ model Post {
   user       User      @relation(fields: [userEmail], references: [email])
   comments   Comment[]
 
+  @@unique([userEmail, title])
   @@index([userEmail])
   @@index([categoryId])
 }
