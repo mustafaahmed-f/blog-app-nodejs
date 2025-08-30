@@ -21,9 +21,12 @@ export async function updatePost(
     let tagsArr: any = null;
     let newSlug: string | null = null;
 
+    //Todo : use userName from req.user after using clerk:
+    const userName = "mustafaAhmed";
+
     //// check if title is sent so create new slug
     if (post.title) {
-      newSlug = post.title.trim().split(" ").join("-");
+      newSlug = post.title.trim().split(" ").join("-") + "-" + userName;
     }
 
     //// check if tags changed , create tags arr and apply connectOrCreate

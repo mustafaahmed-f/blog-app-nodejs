@@ -17,31 +17,13 @@ export async function addPost(req: Request, res: Response, next: NextFunction) {
       .map((tag) => tag.trim().toLowerCase());
     // console.log("newPost", newPost);
     //// Check if same user has prev. post with the same title:
-    //Todo : use email add from req.user after using clerk:
+    //Todo : use email and userName add from req.user after using clerk:
     const userEmail = "mostafa@gmail.com";
-    const checkPostExistence = await prisma.post.findFirst({
-      where: {
-        AND: [
-          {
-            title: {
-              equals: newPost.title,
-            },
-          },
-          {
-            userEmail: {
-              equals: userEmail,
-            },
-          },
-        ],
-      },
-    });
-
-    if (checkPostExistence)
-      return next(new Error("User can't add multiple posts with same title."));
+    const userName = "mustafaAhmed";
 
     //TODO: check category existence
 
-    const slug = newPost.title.trim().split(" ").join("-");
+    const slug = newPost.title.trim().split(" ").join("-") + "-" + userName;
 
     const result = await prisma.post.create({
       data: {
