@@ -3,6 +3,7 @@ import { getErrorMsg } from "../../../utils/helperMethods/generateErrorMsg.js";
 import { prisma } from "../../../services/prismaClient.js";
 import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
 import { getSuccessMsg } from "../../../utils/helperMethods/generateSuccessMsg.js";
+import { handlePrismaError } from "../../../utils/helperMethods/handlePrismaError.js";
 
 export async function getSinglePost(
   req: Request,
@@ -27,8 +28,6 @@ export async function getSinglePost(
       },
     });
 
-    if (!result) return next(new Error(getErrorMsg("Post", "was", "notFound")));
-
     return res.status(201).json(
       getJsonResponse({
         message: getSuccessMsg("Post", "has", "fetched"),
@@ -36,6 +35,6 @@ export async function getSinglePost(
       })
     );
   } catch (error) {
-    return next(new Error(`Error: ${error}`));
+    return next(new Error(handlePrismaError(error).message));
   }
 }

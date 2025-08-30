@@ -5,6 +5,7 @@ import z from "zod";
 import { updatePostSchema } from "../validations/updatePost.validation.js";
 import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
 import { getSuccessMsg } from "../../../utils/helperMethods/generateSuccessMsg.js";
+import { handlePrismaError } from "../../../utils/helperMethods/handlePrismaError.js";
 
 type updatedPost = z.infer<typeof updatePostSchema>;
 
@@ -28,9 +29,6 @@ export async function updatePost(
         },
       },
     });
-
-    if (!checkPostExistence)
-      return next(new Error(getErrorMsg("Post", "was", "notFound")));
 
     let tagsArr: any = null;
     let newSlug: string | null = null;
@@ -89,6 +87,6 @@ export async function updatePost(
       })
     );
   } catch (error) {
-    return next(new Error(`Error: ${error}`));
+    return next(new Error(handlePrismaError(error).message));
   }
 }

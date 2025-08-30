@@ -5,6 +5,7 @@ import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js
 import { addPostSchema } from "../validations/addPost.validation.js";
 import { prisma } from "../../../services/prismaClient.js";
 import { getErrorMsg } from "../../../utils/helperMethods/generateErrorMsg.js";
+import { handlePrismaError } from "../../../utils/helperMethods/handlePrismaError.js";
 
 type newPost = z.infer<typeof addPostSchema>;
 
@@ -77,8 +78,6 @@ export async function addPost(req: Request, res: Response, next: NextFunction) {
       })
     );
   } catch (error) {
-    return next(
-      new Error(`${getErrorMsg("Post", "was", "notCreated")}. Error: ${error}`)
-    );
+    return next(new Error(handlePrismaError(error).message));
   }
 }

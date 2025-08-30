@@ -1,6 +1,9 @@
 import { Prisma } from "@prisma/client";
 
-export function handlePrismaError(error: any) {
+export function handlePrismaError(error: any): {
+  status: number;
+  message: string;
+} {
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
     switch (error.code) {
       case "P2002":
@@ -22,8 +25,7 @@ export function handlePrismaError(error: any) {
       default:
         return {
           status: 500,
-          message: "Database error",
-          details: error.message,
+          message: `Database error : ${error.message}`,
         };
     }
   }
