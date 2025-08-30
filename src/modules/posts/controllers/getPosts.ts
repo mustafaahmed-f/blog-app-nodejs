@@ -18,6 +18,16 @@ export async function getPosts(
   const posts = await prisma.post.findMany({
     take,
     skip,
+    omit: {
+      id: true,
+    },
+    include: {
+      tags: {
+        omit: {
+          id: true,
+        },
+      },
+    },
   });
 
   if (!posts.length)

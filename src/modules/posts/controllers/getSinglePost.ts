@@ -18,6 +18,13 @@ export async function getSinglePost(
       omit: {
         id: true,
       },
+      include: {
+        tags: {
+          omit: {
+            id: true,
+          },
+        },
+      },
     });
 
     if (!result) return next(new Error(getErrorMsg("Post", "was", "notFound")));

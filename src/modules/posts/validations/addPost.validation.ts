@@ -19,7 +19,14 @@ export const addPostSchema = z.object({
 
   img: z.url(invalidUrlMsg()).optional().nullable(),
 
-  tags: z.string().min(1, requiredFieldMsg("tags")).max(100, maxLengthMsg(100)),
+  tags: z
+    .string()
+    .min(1, requiredFieldMsg("tags"))
+    .max(100, maxLengthMsg(100))
+    .regex(
+      /^[a-zA-Z]+(?:,[a-zA-Z]+)*$/,
+      "Tags must be letters separated by commas"
+    ),
 
   categoryId: z.string().min(1, requiredFieldMsg("categoryId")),
 });
