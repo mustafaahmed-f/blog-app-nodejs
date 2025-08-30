@@ -52,6 +52,7 @@ model Post {
   userEmail  String
   user       User      @relation(fields: [userEmail], references: [email])
   comments   Comment[]
+  tags       Tag[]
 
   @@unique([userEmail, title])
   @@index([userEmail])
@@ -76,4 +77,10 @@ model Category {
   title String
   img   String?
   Posts Post[]
+}
+
+model Tag {
+  id    String @id @default(cuid()) @map("_id")
+  name  String @unique
+  posts Post[]
 }

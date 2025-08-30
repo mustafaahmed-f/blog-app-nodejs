@@ -19,5 +19,7 @@ export const addPostSchema = z.object({
 
   img: z.url(invalidUrlMsg()).optional().nullable(),
 
+  tags: z.string().min(1, requiredFieldMsg("tags")),
+
   categoryId: z.string().min(1, requiredFieldMsg("categoryId")),
 });
