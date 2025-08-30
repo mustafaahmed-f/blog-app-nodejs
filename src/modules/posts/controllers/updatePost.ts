@@ -32,7 +32,7 @@ export async function updatePost(
     if (!checkPostExistence)
       return next(new Error(getErrorMsg("Post", "was", "notFound")));
 
-    let tagsArr: string[] | null = null;
+    let tagsArr: any = null;
     let newSlug: string | null = null;
 
     //// check if title is sent so create new slug
@@ -42,7 +42,19 @@ export async function updatePost(
 
     //// check if tags changed , create tags arr and apply connectOrCreate
     if (post.tags) {
-      tagsArr = post.tags.split(",").map((tag) => tag.trim().toLowerCase());
+      tagsArr = await Promise.all(
+        post.tags.split(",").map((tag) => {
+          return prisma.tag.upsert({
+            where: {
+              name: tag,
+            },
+            update: {},
+            create: {
+              name: tag,
+            },
+          });
+        })
+      );
     }
 
     const updatedPost = await prisma.post.update({
@@ -55,16 +67,7 @@ export async function updatePost(
         tags: !tagsArr
           ? undefined
           : {
-              connectOrCreate: tagsArr.map((tag) => {
-                return {
-                  where: {
-                    name: tag,
-                  },
-                  create: {
-                    name: tag,
-                  },
-                };
-              }),
+              set: tagsArr.map((tag: any) => ({ id: tag.id })),
             },
       },
       omit: {

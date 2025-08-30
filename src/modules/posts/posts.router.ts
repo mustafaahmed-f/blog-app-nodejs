@@ -6,6 +6,7 @@ import { addPost } from "./controllers/addPost.js";
 import { getSinglePost } from "./controllers/getSinglePost.js";
 import { updatePost } from "./controllers/updatePost.js";
 import { updatePostSchema } from "./validations/updatePost.validation.js";
+import { deletePost } from "./controllers/deletePost.js";
 
 const router: Router = Router();
 
@@ -22,5 +23,6 @@ router.put(
   validationMiddleware(updatePostSchema),
   updatePost
 );
+router.delete("/deletePost/:slug", deletePost);
 
 export default router;
