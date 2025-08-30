@@ -19,6 +19,26 @@ export async function deletePost(
       omit: {
         id: true,
       },
+      include: {
+        tags: {},
+      },
+    });
+
+    await prisma.tag.deleteMany({
+      where: {
+        AND: [
+          {
+            posts: {
+              none: {},
+            },
+          },
+          {
+            id: {
+              in: deletedPost.tags.map((tag) => tag.id ?? []),
+            },
+          },
+        ],
+      },
     });
 
     return res.status(200).json(

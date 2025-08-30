@@ -26,6 +26,8 @@ export async function addPost(req: Request, res: Response, next: NextFunction) {
             title: {
               equals: newPost.title,
             },
+          },
+          {
             userEmail: {
               equals: userEmail,
             },
