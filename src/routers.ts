@@ -1,3 +1,4 @@
-import postsRouter from "./modules/posts/posts.router.js";
+import postsRouter from "./modules/posts/posts.routes.js";
+import commentsRouter from "./modules/comments/comments.routes.js";
 
-export { postsRouter };
+export { postsRouter, commentsRouter };
