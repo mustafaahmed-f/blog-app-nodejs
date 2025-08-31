@@ -7,11 +7,13 @@ import { getSinglePost } from "./controllers/getSinglePost.js";
 import { updatePost } from "./controllers/updatePost.js";
 import { updatePostSchema } from "./validations/updatePost.validation.js";
 import { deletePost } from "./controllers/deletePost.js";
+import { incViews } from "./controllers/incViews.js";
 
 const router: Router = Router();
 
 router.get("/getPosts", getPosts);
 router.get("/getPost/:slug", getSinglePost);
+router.post("/incViews/:slug", incViews);
 
 //========================================================================================
 //================================ Auth routes ===========================================
