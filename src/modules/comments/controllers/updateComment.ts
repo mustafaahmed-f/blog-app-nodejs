@@ -39,11 +39,6 @@ export async function updateComment(
             updatedAt: true,
           },
         },
-        post: {
-          omit: {
-            id: true,
-          },
-        },
       },
     });
 

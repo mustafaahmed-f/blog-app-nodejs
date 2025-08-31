@@ -1,28 +1,19 @@
 import { NextFunction, Request, Response } from "express";
-import z from "zod";
-import { addCommentSchema } from "../validations/addComment.validation.js";
 import { handlePrismaError } from "../../../utils/helperMethods/handlePrismaError.js";
 import { prisma } from "../../../services/prismaClient.js";
 import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
 import { getSuccessMsg } from "../../../utils/helperMethods/generateSuccessMsg.js";
 
-type newComment = z.infer<typeof addCommentSchema>;
-export async function addComment(
+export async function deleteComment(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   try {
-    const comment: newComment = req.body;
-    const postSlug = req.query.postSlug?.toString();
-    if (!postSlug) return next(new Error("Post slug is required."));
-    //Todo : use email add from req.user after using clerk:
-    const userEmail = "mostafa@gmail.com";
-    const newComment = await prisma.comment.create({
-      data: {
-        desc: comment.desc,
-        userEmail,
-        postSlug,
+    const commentId = req.params.id;
+    const deletedComment = await prisma.comment.delete({
+      where: {
+        id: commentId,
       },
       include: {
         user: {
@@ -35,10 +26,11 @@ export async function addComment(
         },
       },
     });
-    return res.status(201).json(
+
+    return res.status(200).json(
       getJsonResponse({
-        message: getSuccessMsg("Comment", "has", "created"),
-        data: newComment,
+        message: getSuccessMsg("Comment", "has", "deleted"),
+        data: deletedComment,
       })
     );
   } catch (error) {
