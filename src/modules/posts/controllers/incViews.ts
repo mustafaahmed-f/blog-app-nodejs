@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { prisma } from "../../../services/prismaClient.js";
 import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
 import { getSuccessMsg } from "../../../utils/helperMethods/generateSuccessMsg.js";
+import { handlePrismaError } from "../../../utils/helperMethods/handlePrismaError.js";
 
 export async function incViews(
   req: Request,
@@ -30,5 +31,7 @@ export async function incViews(
         data: modifiedPost,
       })
     );
-  } catch (error) {}
+  } catch (error) {
+    return next(new Error(handlePrismaError(error).message));
+  }
 }

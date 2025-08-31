@@ -20,6 +20,7 @@ export function initiateApp(app: Application) {
 
   app.use(`${baseURL}/posts`, routes.postsRouter);
   app.use(`${baseURL}/comments`, routes.commentsRouter);
+  app.use(`${baseURL}/categories`, routes.categoriesRouter);
 
   app.use("/{*any}", (req: Request, res: Response) => {
     res.json({ message: "In-valid routing .. " });
