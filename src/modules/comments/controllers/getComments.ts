@@ -21,7 +21,7 @@ export async function getComments(
     const comments = await prisma.comment.findMany({
       //// Cursor is used ot specify the row from which we start our query
       cursor: cursor ? { id: cursor.toString() } : undefined,
-      take,
+      take: take + 1,
       skip: cursor ? 1 : 0, //// if we have cursor so we skip it because it is the id of the last element
       where: {
         postSlug: postSlug.toString(),
@@ -42,7 +42,8 @@ export async function getComments(
     });
 
     // Check if there's another page
-    const hasMore = comments.length === take;
+    const hasMore = comments.length > take;
+    comments.pop();
 
     const commentsCount = await prisma.comment.count({
       where: {
@@ -58,6 +59,7 @@ export async function getComments(
           commentsCount,
           hasMore,
           nextCursor: hasMore ? comments[comments.length - 1].id : null,
+          fetchedComments: comments.length,
         },
       })
     );
