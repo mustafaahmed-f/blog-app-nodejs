@@ -2,7 +2,7 @@ import { Application, Request, Response } from "express";
 import morgan from "morgan";
 import cors from "cors";
 import { globalErrorHandler } from "./utils/globalErrorHandler.js";
-import * as routers from "./routers.js";
+import * as routes from "./routes.js";
 import express from "express";
 import { MainAppName } from "./utils/constants/MainAppName.js";
 
@@ -18,8 +18,8 @@ export function initiateApp(app: Application) {
     return res.send(`Hello ${MainAppName}!!`);
   });
 
-  app.use(`${baseURL}/posts`, routers.postsRouter);
-  app.use(`${baseURL}/comments`, routers.commentsRouter);
+  app.use(`${baseURL}/posts`, routes.postsRouter);
+  app.use(`${baseURL}/comments`, routes.commentsRouter);
 
   app.use("/{*any}", (req: Request, res: Response) => {
     res.json({ message: "In-valid routing .. " });
