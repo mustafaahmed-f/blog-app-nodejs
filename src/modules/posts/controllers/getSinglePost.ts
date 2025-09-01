@@ -12,6 +12,10 @@ export async function getSinglePost(
 ) {
   try {
     const postSlug = req.params.slug;
+    if (!postSlug) return next(new Error("Post slug is required."));
+    //todo : try to get userEmail using clerk;
+    const userEmail = req.query.userEmail?.toString();
+    let userLikedPost: any = null;
     const result = await prisma.post.findUnique({
       where: {
         slug: postSlug,
@@ -25,13 +29,33 @@ export async function getSinglePost(
             id: true,
           },
         },
+        _count: {
+          select: {
+            comments: true,
+            Likes: true,
+          },
+        },
       },
     });
+
+    if (userEmail) {
+      userLikedPost = await prisma.likes.findUnique({
+        where: {
+          userEmail_postSlug: {
+            userEmail,
+            postSlug,
+          },
+        },
+      });
+    }
 
     return res.status(201).json(
       getJsonResponse({
         message: getSuccessMsg("Post", "has", "fetched"),
         data: result,
+        additionalInfo: {
+          userLikedPost: !!userLikedPost,
+        },
       })
     );
   } catch (error) {

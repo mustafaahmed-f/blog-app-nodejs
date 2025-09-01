@@ -9,6 +9,7 @@ import { updatePostSchema } from "./validations/updatePost.validation.js";
 import { deletePost } from "./controllers/deletePost.js";
 import { incViews } from "./controllers/incViews.js";
 import { searchPost } from "./controllers/searchPost.js";
+import { toggleLike } from "./controllers/toggleLike.js";
 
 const router: Router = Router();
 
@@ -21,6 +22,7 @@ router.get("/search", searchPost);
 //================================ Auth routes ===========================================
 //========================================================================================
 
+router.post("/toggleLike", toggleLike);
 router.post("/addPost", validationMiddleware(addPostSchema), addPost);
 router.put(
   "/updatePost/:slug",

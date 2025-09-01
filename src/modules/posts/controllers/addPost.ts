@@ -15,13 +15,10 @@ export async function addPost(req: Request, res: Response, next: NextFunction) {
     const tagsArr = newPost.tags
       .split(",")
       .map((tag) => tag.trim().toLowerCase());
-    // console.log("newPost", newPost);
-    //// Check if same user has prev. post with the same title:
+
     //Todo : use email and userName add from req.user after using clerk:
     const userEmail = "mostafa@gmail.com";
     const userName = "mustafaAhmed";
-
-    //TODO: check category existence
 
     const slug = newPost.title.trim().split(" ").join("-") + "-" + userName;
 
