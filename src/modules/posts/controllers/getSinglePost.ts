@@ -35,6 +35,20 @@ export async function getSinglePost(
             Likes: true,
           },
         },
+        user: {
+          omit: {
+            id: true,
+            password: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+        cat: {
+          omit: {
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
       },
     });
 

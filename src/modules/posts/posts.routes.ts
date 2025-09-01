@@ -10,13 +10,15 @@ import { deletePost } from "./controllers/deletePost.js";
 import { incViews } from "./controllers/incViews.js";
 import { searchPost } from "./controllers/searchPost.js";
 import { toggleLike } from "./controllers/toggleLike.js";
+import { getPostsWithFilter } from "./controllers/getPostsWithFilter.js";
 
 const router: Router = Router();
 
 router.get("/getPosts", getPosts);
 router.get("/getPost/:slug", getSinglePost);
-router.post("/incViews/:slug", incViews);
 router.get("/search", searchPost);
+router.get("/getPostsWithFilter", getPostsWithFilter);
+router.post("/incViews/:slug", incViews);
 
 //========================================================================================
 //================================ Auth routes ===========================================

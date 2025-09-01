@@ -27,6 +27,20 @@ export async function getPosts(
           id: true,
         },
       },
+      user: {
+        omit: {
+          id: true,
+          password: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
+      cat: {
+        omit: {
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
     },
   });
 
