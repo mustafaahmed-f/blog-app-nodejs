@@ -8,12 +8,14 @@ import { updatePost } from "./controllers/updatePost.js";
 import { updatePostSchema } from "./validations/updatePost.validation.js";
 import { deletePost } from "./controllers/deletePost.js";
 import { incViews } from "./controllers/incViews.js";
+import { searchPost } from "./controllers/searchPost.js";
 
 const router: Router = Router();
 
 router.get("/getPosts", getPosts);
 router.get("/getPost/:slug", getSinglePost);
 router.post("/incViews/:slug", incViews);
+router.get("/search", searchPost);
 
 //========================================================================================
 //================================ Auth routes ===========================================

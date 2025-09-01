@@ -38,6 +38,7 @@ model User {
   posts     Post[]
   Account   Account[]
   Comment   Comment[]
+  Likes     Likes[]
 }
 
 model Post {
@@ -56,10 +57,20 @@ model Post {
   user       User      @relation(fields: [userEmail], references: [email])
   comments   Comment[]
   tags       Tag[]
+  Likes      Likes[]
 
   @@unique([userEmail, title])
   @@index([userEmail])
   @@index([categoryId])
+  @@fulltext([title, desc])
+}
+
+model Likes {
+  id        String @id @default(cuid())
+  userEmail String
+  user      User   @relation(fields: [userEmail], references: [email])
+  postSlug  String
+  post      Post   @relation(fields: [postSlug], references: [slug])
 }
 
 model Comment {
