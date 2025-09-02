@@ -5,11 +5,14 @@ import { globalErrorHandler } from "./utils/globalErrorHandler.js";
 import * as routes from "./routes.js";
 import express from "express";
 import { MainAppName } from "./utils/constants/MainAppName.js";
+import { connectRedis } from "./services/redisClient.js";
 
-export function initiateApp(app: Application) {
+export async function initiateApp(app: Application) {
   app.use(express.json());
   app.use(morgan("dev"));
   app.use(cors());
+
+  await connectRedis();
 
   const baseURL = `/${MainAppName}`;
   const port = process.env.PORT || 5000;

@@ -42,6 +42,9 @@ export async function getPosts(
         },
       },
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 
   if (!posts.length)
