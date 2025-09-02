@@ -11,6 +11,7 @@ export async function initiateApp(app: Application) {
   app.use(express.json());
   app.use(morgan("dev"));
   app.use(cors());
+  app.set("trust proxy", true);
 
   await connectRedis();
 

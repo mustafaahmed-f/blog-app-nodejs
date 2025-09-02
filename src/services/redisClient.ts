@@ -13,12 +13,10 @@ export async function connectRedis() {
   await redisClient.connect();
 }
 
-export async function redisClientInstance() {
+export function redisClientInstance() {
   if (!redisClient) {
     throw new Error("Redis client not initialized. Call connectRedis() first.");
   }
 
   return redisClient;
 }
-
-// export default redisClient;
