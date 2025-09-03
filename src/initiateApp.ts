@@ -6,6 +6,7 @@ import * as routes from "./routes.js";
 import express from "express";
 import { MainAppName } from "./utils/constants/MainAppName.js";
 import { connectRedis } from "./services/redisClient.js";
+import { RateLimit } from "./middlewares/RateLimit.js";
 
 export async function initiateApp(app: Application) {
   app.use(express.json());
@@ -22,6 +23,7 @@ export async function initiateApp(app: Application) {
     return res.send(`Hello ${MainAppName}!!`);
   });
 
+  app.use(RateLimit());
   app.use(`${baseURL}/posts`, routes.postsRouter);
   app.use(`${baseURL}/comments`, routes.commentsRouter);
   app.use(`${baseURL}/categories`, routes.categoriesRouter);
