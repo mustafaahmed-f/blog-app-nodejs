@@ -12,6 +12,7 @@ import { searchPost } from "./controllers/searchPost.js";
 import { toggleLike } from "./controllers/toggleLike.js";
 import { getPostsWithFilter } from "./controllers/getPostsWithFilter.js";
 import { oneCallPerIpMiddleware } from "../../middlewares/oneCallPerIpMiddleware.js";
+import { getFeaturedPosts } from "./controllers/getFeaturedPosts.js";
 
 const router: Router = Router();
 
@@ -19,6 +20,7 @@ router.get("/getPosts", getPosts);
 router.get("/getPost/:slug", getSinglePost);
 router.get("/search", searchPost);
 router.get("/getPostsWithFilter", getPostsWithFilter);
+router.get("/getFeaturedPosts", getFeaturedPosts);
 router.post("/incViews/:slug", oneCallPerIpMiddleware(""), incViews);
 
 //========================================================================================
