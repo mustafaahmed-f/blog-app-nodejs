@@ -29,7 +29,7 @@ export async function initiateApp(app: Application) {
   app.use(`${baseURL}/categories`, routes.categoriesRouter);
 
   app.use("/{*any}", (req: Request, res: Response) => {
-    res.json({ message: "In-valid routing .. " });
+    res.status(404).json({ error: "In-valid routing .. " });
   });
 
   app.use(globalErrorHandler);
