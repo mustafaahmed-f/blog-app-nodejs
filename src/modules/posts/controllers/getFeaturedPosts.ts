@@ -13,26 +13,33 @@ export async function getFeaturedPosts(
 ) {
   try {
     const redisClient = redisClientInstance();
+
     const featuredPostFromRedis = await redisClient.zRange(
       featuredPostsSetName,
       0,
-      0,
+      9,
       {
-        BY: "SCORE",
         REV: true,
       }
     );
 
-    const featuredPost = await prisma.post.findUnique({
-      where: {
-        id: featuredPostFromRedis[0],
-      },
-    });
+    const featuredPosts = await Promise.all(
+      featuredPostFromRedis.map(async (post) => {
+        return await prisma.post.findUnique({
+          where: {
+            id: post,
+          },
+          include: {
+            tags: {},
+          },
+        });
+      })
+    );
 
     return res.status(200).json(
       getJsonResponse({
         message: getSuccessMsg("Post", "has", "fetched"),
-        data: featuredPost,
+        data: featuredPosts,
       })
     );
   } catch (error) {
