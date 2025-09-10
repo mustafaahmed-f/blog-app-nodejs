@@ -3,6 +3,7 @@ import { handlePrismaError } from "../../../utils/helperMethods/handlePrismaErro
 import { prisma } from "../../../services/prismaClient.js";
 import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
 import { getSuccessMsg } from "../../../utils/helperMethods/generateSuccessMsg.js";
+import { pagination } from "../../../utils/helperMethods/pagination.js";
 
 export async function getPostsWithFilter(
   req: Request,
@@ -14,6 +15,13 @@ export async function getPostsWithFilter(
     const tag = req.query.tag?.toString();
     const userEmail = req.query.userEmail?.toString();
 
+    const { page, size } = req.query;
+
+    const { take, skip } = pagination({
+      page: parseInt((page as string) ?? "1"),
+      size: parseInt((size as string) ?? "10"),
+    });
+
     const filters = [category, tag, userEmail].filter(Boolean);
 
     if (!filters.length)
@@ -23,6 +31,8 @@ export async function getPostsWithFilter(
     }
 
     const result = await prisma.post.findMany({
+      take: take ? take : 10,
+      skip: skip ? skip : 0,
       where: {
         categoryId: category ? category : undefined,
         tags: tag
