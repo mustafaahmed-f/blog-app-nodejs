@@ -31,7 +31,7 @@ export async function getPostsWithFilter(
     }
 
     const result = await prisma.post.findMany({
-      take: take ? take : 10,
+      take: take ? take + 1 : 11,
       skip: skip ? skip : 0,
       where: {
         categoryId: category ? category : undefined,
@@ -76,12 +76,32 @@ export async function getPostsWithFilter(
       },
     });
 
+    const hasNext = result.length > take ? true : false;
+
+    result.pop();
+
+    const postsCount = await prisma.post.count({
+      where: {
+        categoryId: category ? category : undefined,
+        tags: tag
+          ? {
+              some: {
+                name: tag,
+              },
+            }
+          : undefined,
+        userEmail: userEmail ? userEmail : undefined,
+      },
+    });
+
     return res.status(200).json(
       getJsonResponse({
         message: getSuccessMsg("Post", "have", "fetched"),
         data: result,
         additionalInfo: {
           filterResults: result.length,
+          postsCount,
+          hasNext,
         },
       })
     );
