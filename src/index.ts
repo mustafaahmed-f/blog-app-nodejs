@@ -2,13 +2,17 @@ import dotenv from "dotenv";
 import express, { Application } from "express";
 import { initiateApp } from "./initiateApp.js";
 import { assignRandomImages } from "./modules/posts/utils/assignImagesToPosts.js";
+import { addCateogiresToDB } from "./modules/categories/utils/addCategoriesToDB.js";
+import { addPostsToDB } from "./modules/posts/utils/addPostsToDB.js";
+import { addCommentsToDB } from "./modules/comments/utils/addCommentsToDB.js";
 dotenv.config();
 
 const app: Application = express();
 
-// addCommentsToDB(20);
+// addCommentsToDB(10);
 // addPostsToDB(30);
 // addFeaturedPostsToRedis();
 // assignRandomImages();
+// addCateogiresToDB();
 
 initiateApp(app);
