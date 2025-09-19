@@ -11,7 +11,13 @@ import { RateLimit } from "./middlewares/RateLimit.js";
 export async function initiateApp(app: Application) {
   app.use(express.json());
   app.use(morgan("dev"));
-  app.use(cors());
+  app.use(
+    cors({
+      origin: "http://localhost:3000",
+      allowedHeaders: ["Content-Type", "Authorization"],
+      credentials: true,
+    })
+  );
   app.set("trust proxy", true);
 
   await connectRedis();

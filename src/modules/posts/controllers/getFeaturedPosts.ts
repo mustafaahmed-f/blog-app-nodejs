@@ -31,6 +31,18 @@ export async function getFeaturedPosts(
           },
           include: {
             tags: {},
+            user: {
+              omit: {
+                id: true,
+                password: true,
+                createdAt: true,
+                updatedAt: true,
+              },
+            },
+            cat: {},
+          },
+          omit: {
+            id: true,
           },
         });
       })

@@ -5,6 +5,7 @@ import { assignRandomImages } from "./modules/posts/utils/assignImagesToPosts.js
 import { addCateogiresToDB } from "./modules/categories/utils/addCategoriesToDB.js";
 import { addPostsToDB } from "./modules/posts/utils/addPostsToDB.js";
 import { addCommentsToDB } from "./modules/comments/utils/addCommentsToDB.js";
+import { addFeaturedPostsToRedis } from "./modules/posts/utils/addPostsToRedis.js";
 dotenv.config();
 
 const app: Application = express();

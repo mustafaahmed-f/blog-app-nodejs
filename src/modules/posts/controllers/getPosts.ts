@@ -50,11 +50,10 @@ export async function getPosts(
   if (!posts.length)
     return next(new Error(getErrorMsg("Post", "were", "notFound")));
 
-  const hasNext = posts.length > take ? true : false;
-
-  posts.pop();
-
   const postsCount = await prisma.post.count();
+  const hasNext =
+    postsCount >
+    parseInt(page?.toString() || "1") * parseInt(size?.toString() || "10");
 
   return res.status(200).json(
     getJsonResponse({
