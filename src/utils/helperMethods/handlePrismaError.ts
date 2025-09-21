@@ -31,8 +31,8 @@ export function handlePrismaError(error: any): {
   }
 
   if (error instanceof Prisma.PrismaClientValidationError) {
-    return { status: 400, message: "Invalid input data" };
+    return { status: 400, message: `Invalid input data :  ${error}` };
   }
 
-  return { status: 500, message: "Unknown server error" };
+  return { status: 500, message: `Unknown server error : ${error}` };
 }

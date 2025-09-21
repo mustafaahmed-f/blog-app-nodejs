@@ -6,6 +6,7 @@ import { addCateogiresToDB } from "./modules/categories/utils/addCategoriesToDB.
 import { addPostsToDB } from "./modules/posts/utils/addPostsToDB.js";
 import { addCommentsToDB } from "./modules/comments/utils/addCommentsToDB.js";
 import { addFeaturedPostsToRedis } from "./modules/posts/utils/addPostsToRedis.js";
+import { updateComments } from "./modules/comments/utils/updateComments.js";
 dotenv.config();
 
 const app: Application = express();
@@ -15,5 +16,6 @@ const app: Application = express();
 // addFeaturedPostsToRedis();
 // assignRandomImages();
 // addCateogiresToDB();
+// updateComments();
 
 initiateApp(app);
