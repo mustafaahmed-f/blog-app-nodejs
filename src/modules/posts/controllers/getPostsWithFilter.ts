@@ -31,8 +31,8 @@ export async function getPostsWithFilter(
     }
 
     const result = await prisma.post.findMany({
-      take: take ? take + 1 : 11,
-      skip: skip ? skip : 0,
+      take,
+      skip,
       where: {
         categoryId: category ? category : undefined,
         tags: tag
@@ -76,10 +76,6 @@ export async function getPostsWithFilter(
       },
     });
 
-    const hasNext = result.length > take ? true : false;
-
-    result.pop();
-
     const postsCount = await prisma.post.count({
       where: {
         categoryId: category ? category : undefined,
@@ -93,6 +89,10 @@ export async function getPostsWithFilter(
         userEmail: userEmail ? userEmail : undefined,
       },
     });
+
+    const hasNext =
+      postsCount >
+      parseInt(page?.toString() || "1") * parseInt(size?.toString() || "10");
 
     return res.status(200).json(
       getJsonResponse({

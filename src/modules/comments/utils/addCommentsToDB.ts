@@ -2,14 +2,15 @@ import { faker } from "@faker-js/faker";
 import { prisma } from "../../../services/prismaClient.js";
 
 const userEmail = "mostafa@gmail.com";
-const postSlug = "vesica-vester-illum-cunctatio";
+const postSlug = "tutis-adiuvo-vir-admitto";
 
 export async function addCommentsToDB(count: number) {
-  const commentsData = Array.from({ length: count }).map(() => {
+  const commentsData = Array.from({ length: count }).map((_, i) => {
     return {
       desc: faker.lorem.words({ min: 1, max: 10 }),
       userEmail,
       postSlug,
+      createdAt: new Date(Date.now() + i * 1000),
     };
   });
 
