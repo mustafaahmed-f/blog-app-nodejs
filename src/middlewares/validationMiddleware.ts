@@ -16,6 +16,7 @@ export function validationMiddleware(validaitonSchema: z.ZodType) {
         (req as any).validationErrorArr = error.issues;
         return next(error.issues);
       }
+      return next(error);
     }
   };
 }
