@@ -28,5 +28,9 @@ export const addPostSchema = z.object({
       "Tags must be letters separated by commas"
     ),
 
+  html: z.string().min(1, requiredFieldMsg("html")),
+
+  delta: z.string().min(1, requiredFieldMsg("delta")),
+
   categoryId: z.string().min(1, requiredFieldMsg("categoryId")),
 });

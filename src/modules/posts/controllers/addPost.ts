@@ -5,6 +5,8 @@ import { getSuccessMsg } from "../../../utils/helperMethods/generateSuccessMsg.j
 import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
 import { handlePrismaError } from "../../../utils/helperMethods/handlePrismaError.js";
 import { addPostSchema } from "../validations/addPost.validation.js";
+import { JSDOM } from "jsdom";
+import createDOMPurify from "dompurify";
 
 type newPost = z.infer<typeof addPostSchema>;
 
@@ -21,11 +23,17 @@ export async function addPost(req: Request, res: Response, next: NextFunction) {
 
     const slug = newPost.title.trim().split(" ").join("-") + "-" + userName;
 
+    //// Purify the sent html :
+    const window = new JSDOM("").window;
+    const DOMPurify = createDOMPurify(window as any);
+    const clean = DOMPurify.sanitize(newPost.html);
+
     const result = await prisma.post.create({
       data: {
         ...newPost,
         slug: slug,
         userEmail,
+        html: clean,
         tags: {
           connectOrCreate: tagsArr.map((tag) => {
             return {
