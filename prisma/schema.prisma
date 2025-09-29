@@ -49,6 +49,8 @@ model Post {
   slug       String    @unique
   title      String
   desc       String
+  delta      String    @default("")
+  html       String    @default("")
   img        String?
   views      Int       @default(0)
   categoryId String
