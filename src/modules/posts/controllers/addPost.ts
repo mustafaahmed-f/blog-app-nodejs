@@ -31,6 +31,7 @@ export async function addPost(req: Request, res: Response, next: NextFunction) {
     const result = await prisma.post.create({
       data: {
         ...newPost,
+        img: "", // todo : add img url after uploading it to amazon s3
         slug: slug,
         userEmail,
         html: clean,

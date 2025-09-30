@@ -1,6 +1,5 @@
 import { z } from "zod";
 import {
-  invalidEmailMsg,
   invalidUrlMsg,
   maxLengthMsg,
   requiredFieldMsg,
@@ -17,7 +16,19 @@ export const addPostSchema = z.object({
     .min(1, requiredFieldMsg("description"))
     .max(10000, maxLengthMsg(10000)),
 
-  img: z.url(invalidUrlMsg()).optional().nullable(),
+  img: z
+    .union([
+      z
+        .instanceof(File)
+        .refine((file) => file.type.startsWith("image/"), {
+          message: "Only image files are allowed",
+        })
+        .refine((file) => file.size <= 1024 * 1024, {
+          message: "Image must be smaller than 1MB",
+        }),
+      z.string().url(invalidUrlMsg()),
+    ])
+    .refine((val) => val !== null, { message: "Image is required" }),
 
   tags: z
     .string()
