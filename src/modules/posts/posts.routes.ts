@@ -13,6 +13,9 @@ import { toggleLike } from "./controllers/toggleLike.js";
 import { getPostsWithFilter } from "./controllers/getPostsWithFilter.js";
 import { oneCallPerIpMiddleware } from "../../middlewares/oneCallPerIpMiddleware.js";
 import { getFeaturedPosts } from "./controllers/getFeaturedPosts.js";
+import { uploadPostImg } from "./controllers/uploadPostImg.js";
+import { uploadFile } from "../../services/multer.js";
+import { fileTypeValidation } from "../../utils/constants/FileTypeValidation.js";
 
 const router: Router = Router();
 
@@ -27,8 +30,18 @@ router.post("/incViews/:slug", oneCallPerIpMiddleware(""), incViews);
 //================================ Auth routes ===========================================
 //========================================================================================
 
+router.post(
+  "/uploadPostImg",
+  uploadFile(fileTypeValidation.image).single("image"),
+  uploadPostImg
+);
 router.post("/toggleLike", toggleLike);
-router.post("/addPost", validationMiddleware(addPostSchema), addPost);
+router.post(
+  "/addPost",
+  validationMiddleware(addPostSchema),
+  uploadFile(fileTypeValidation.image).single("img"),
+  addPost
+);
 router.put(
   "/updatePost/:slug",
   validationMiddleware(updatePostSchema),
