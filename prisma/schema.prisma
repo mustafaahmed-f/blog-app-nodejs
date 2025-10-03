@@ -48,9 +48,9 @@ model Post {
   isEdited   Boolean   @default(false)
   slug       String    @unique
   title      String
-  desc       String
-  delta      String    @default("")
-  html       String    @default("")
+  delta      String    @db.Text
+  html       String    @db.Text
+  desc       String    @db.Text
   img        String?
   views      Int       @default(0)
   categoryId String
