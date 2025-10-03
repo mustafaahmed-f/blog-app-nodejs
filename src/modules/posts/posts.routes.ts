@@ -44,6 +44,7 @@ router.post(
 );
 router.put(
   "/updatePost/:slug",
+  uploadFile(fileTypeValidation.image).single("img"),
   validationMiddleware(updatePostSchema),
   updatePost
 );

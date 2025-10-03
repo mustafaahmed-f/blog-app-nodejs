@@ -62,6 +62,9 @@ export async function getSinglePost(
         },
       });
     }
+    console.log("Result : ", result);
+
+    if (!result) return next(new Error(getErrorMsg("Post", "was", "notFound")));
 
     return res.status(201).json(
       getJsonResponse({

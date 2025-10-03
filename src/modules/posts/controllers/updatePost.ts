@@ -1,13 +1,12 @@
 import { NextFunction, Request, Response } from "express";
-import { prisma } from "../../../services/prismaClient.js";
-import { getErrorMsg } from "../../../utils/helperMethods/generateErrorMsg.js";
 import z from "zod";
-import { updatePostSchema } from "../validations/updatePost.validation.js";
-import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
+import { prisma } from "../../../services/prismaClient.js";
 import { getSuccessMsg } from "../../../utils/helperMethods/generateSuccessMsg.js";
+import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
 import { handlePrismaError } from "../../../utils/helperMethods/handlePrismaError.js";
+import { addPostSchema } from "../validations/addPost.validation.js";
 
-type updatedPost = z.infer<typeof updatePostSchema>;
+type updatedPost = z.infer<typeof addPostSchema>;
 
 export async function updatePost(
   req: Request,
@@ -17,6 +16,7 @@ export async function updatePost(
   try {
     const post: updatedPost = req.body;
     const postSlug = req.params.slug;
+    let img: any = undefined;
 
     let tagsArr: any = null;
     let newSlug: string | null = null;
@@ -46,12 +46,21 @@ export async function updatePost(
       );
     }
 
+    if (req.file?.buffer) {
+      img = req?.file?.buffer;
+      //todo : upload it on s3
+    }
+
+    const fakeImgURL =
+      "https://storage.googleapis.com/fir-auth-1c3bc.appspot.com/1694290122808-71AL1tTRosL._SL1500_.jpg";
+
     const updatedPost = await prisma.post.update({
       where: {
         slug: postSlug,
       },
       data: {
         ...post,
+        img: fakeImgURL,
         slug: newSlug ? newSlug : undefined,
         updatedAt: new Date(),
         isEdited: true,
