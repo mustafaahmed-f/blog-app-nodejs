@@ -12,6 +12,9 @@ type newPost = z.infer<typeof addPostSchema>;
 
 export async function addPost(req: Request, res: Response, next: NextFunction) {
   try {
+    if (!req.file) {
+      return res.status(400).json({ message: "Image is required" });
+    }
     const newPost: newPost = req.body;
     const tagsArr = newPost.tags
       .split(",")
@@ -28,10 +31,17 @@ export async function addPost(req: Request, res: Response, next: NextFunction) {
     const DOMPurify = createDOMPurify(window as any);
     const clean = DOMPurify.sanitize(newPost.html);
 
+    //// Get image :
+    const image = req?.file?.buffer;
+    //todo : upload it on s3
+
+    const fakeImgURL =
+      "https://storage.googleapis.com/fir-auth-1c3bc.appspot.com/1694290122808-71AL1tTRosL._SL1500_.jpg";
+
     const result = await prisma.post.create({
       data: {
         ...newPost,
-        img: "", // todo : add img url after uploading it to amazon s3
+        img: fakeImgURL, // todo : add img url after uploading it to amazon s3
         slug: slug,
         userEmail,
         html: clean,

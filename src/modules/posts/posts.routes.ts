@@ -38,8 +38,8 @@ router.post(
 router.post("/toggleLike", toggleLike);
 router.post(
   "/addPost",
-  validationMiddleware(addPostSchema),
   uploadFile(fileTypeValidation.image).single("img"),
+  validationMiddleware(addPostSchema),
   addPost
 );
 router.put(
