@@ -7,10 +7,13 @@ import { handlePrismaError } from "../../../utils/helperMethods/handlePrismaErro
 import { addPostSchema } from "../validations/addPost.validation.js";
 import { JSDOM } from "jsdom";
 import createDOMPurify from "dompurify";
+import { AuthObject, clerkClient, getAuth } from "@clerk/express";
 
 type newPost = z.infer<typeof addPostSchema>;
 
 export async function addPost(req: Request, res: Response, next: NextFunction) {
+  const { userId } = getAuth(req);
+  const user = userId ? await clerkClient.users.getUser(userId) : null;
   try {
     if (!req.file) {
       return res.status(400).json({ message: "Image is required" });

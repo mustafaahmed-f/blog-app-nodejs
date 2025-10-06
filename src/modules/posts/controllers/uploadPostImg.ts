@@ -7,9 +7,8 @@ export async function uploadPostImg(
   next: NextFunction
 ) {
   try {
-    console.log("API called !!");
+    //todo : use RabbitMQ to remove image if post is not published.
     const image = req?.file?.buffer;
-    // console.log("Image :", image);
     const fakeImgURL =
       "https://storage.googleapis.com/fir-auth-1c3bc.appspot.com/1694290122808-71AL1tTRosL._SL1500_.jpg";
 

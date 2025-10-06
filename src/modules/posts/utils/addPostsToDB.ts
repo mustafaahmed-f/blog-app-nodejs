@@ -34,6 +34,8 @@ export async function addPostsToDB(count: number = 10) {
           title,
           desc,
           slug,
+          html: "",
+          delta: "",
           img: faker.image.urlLoremFlickr({ category: "animals" }),
           categoryId,
           userEmail: "mostafa@gmail.com",
