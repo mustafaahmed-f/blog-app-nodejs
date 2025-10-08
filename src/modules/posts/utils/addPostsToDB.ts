@@ -2,13 +2,22 @@ import { faker } from "@faker-js/faker";
 import { prisma } from "../../../services/prismaClient.js";
 
 const categoryIds = [
-  "cmfk0p6jm0000mscgvvv1t3eb",
-  "cmfk0p6jn0001mscg1850zgv3",
-  "cmfk0p6jn0002mscgwkwbhgu4",
-  "cmfk0p6jn0003mscg65ndln6a",
-  "cmfk0p6jo0004mscgwvbdn4an",
-  "cmfk0p6jp0005mscglzuqyo6q",
+  "cmggucl6p0000o3amqwxfut73",
+  "cmggucl6p0001o3amdumt9igq",
+  "cmggucl6p0002o3am8jmnrkb2",
+  "cmggucl6r0003o3am8tbcmp60",
+  "cmggucl6r0004o3am4w77px0a",
+  "cmggucl6r0005o3amwgmmvw77",
 ];
+
+const category = faker.helpers.arrayElement([
+  "culture",
+  "fashion",
+  "coding",
+  "style",
+  "travel",
+  "food",
+]);
 
 export async function addPostsToDB(count: number = 10) {
   try {
@@ -36,9 +45,9 @@ export async function addPostsToDB(count: number = 10) {
           slug,
           html: "",
           delta: "",
-          img: faker.image.urlLoremFlickr({ category: "animals" }),
+          img: `https://picsum.photos/seed/${category}-${i}/800/600`,
           categoryId,
-          userEmail: "mostafa@gmail.com",
+          userEmail: "mostafafikry97@gmail.com",
           tags: {
             connect: chosenTagIds.map((id) => ({ id })),
           },

@@ -12,7 +12,7 @@ dotenv.config();
 const app: Application = express();
 
 // addCommentsToDB(70);
-// addPostsToDB(30);
+// addPostsToDB(50);
 // addFeaturedPostsToRedis();
 // assignRandomImages();
 // addCateogiresToDB();

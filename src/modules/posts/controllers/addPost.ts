@@ -13,8 +13,16 @@ type newPost = z.infer<typeof addPostSchema>;
 
 export async function addPost(req: Request, res: Response, next: NextFunction) {
   const { userId } = getAuth(req);
-  const user = userId ? await clerkClient.users.getUser(userId) : null;
+  if (!userId) throw new Error("UserId from clerk is not found!!");
+
   try {
+    const user = await prisma.user.findUnique({
+      where: {
+        clerkId: userId,
+      },
+    });
+    if (!user) throw new Error("User not found");
+
     if (!req.file) {
       return res.status(400).json({ message: "Image is required" });
     }
@@ -23,9 +31,8 @@ export async function addPost(req: Request, res: Response, next: NextFunction) {
       .split(",")
       .map((tag) => tag.trim().toLowerCase());
 
-    //Todo : use email and userName add from req.user after using clerk:
-    const userEmail = "mostafa@gmail.com";
-    const userName = "mustafaAhmed";
+    const userEmail = user?.email ?? "";
+    const userName = user?.userName ?? "";
 
     const slug = newPost.title.trim().split(" ").join("-") + "-" + userName;
 
