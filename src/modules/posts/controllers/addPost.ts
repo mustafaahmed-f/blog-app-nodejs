@@ -12,10 +12,9 @@ import { AuthObject, clerkClient, getAuth } from "@clerk/express";
 type newPost = z.infer<typeof addPostSchema>;
 
 export async function addPost(req: Request, res: Response, next: NextFunction) {
-  const { userId } = getAuth(req);
-  if (!userId) throw new Error("UserId from clerk is not found!!");
-
   try {
+    const { userId } = getAuth(req);
+    if (!userId) throw new Error("UserId from clerk is not found!!");
     const user = await prisma.user.findUnique({
       where: {
         clerkId: userId,

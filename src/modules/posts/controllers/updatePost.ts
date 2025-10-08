@@ -5,6 +5,7 @@ import { getSuccessMsg } from "../../../utils/helperMethods/generateSuccessMsg.j
 import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
 import { handlePrismaError } from "../../../utils/helperMethods/handlePrismaError.js";
 import { addPostSchema } from "../validations/addPost.validation.js";
+import { getAuth } from "@clerk/express";
 
 type updatedPost = z.infer<typeof addPostSchema>;
 
@@ -14,6 +15,16 @@ export async function updatePost(
   next: NextFunction
 ) {
   try {
+    const { userId } = getAuth(req);
+    if (!userId) throw new Error("UserId from clerk is not found!!");
+
+    const user = await prisma.user.findUnique({
+      where: {
+        clerkId: userId,
+      },
+    });
+    if (!user) throw new Error("User not found");
+
     const post: updatedPost = req.body;
     const postSlug = req.params.slug;
     let img: any = undefined;
@@ -21,8 +32,7 @@ export async function updatePost(
     let tagsArr: any = null;
     let newSlug: string | null = null;
 
-    //Todo : use userName from req.user after using clerk:
-    const userName = "mustafaAhmed";
+    const userName = user.userName;
 
     //// check if title is sent so create new slug
     if (post.title) {
