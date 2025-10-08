@@ -38,7 +38,6 @@ export async function getSinglePost(
         user: {
           omit: {
             id: true,
-            password: true,
             createdAt: true,
             updatedAt: true,
           },

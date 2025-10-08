@@ -19,7 +19,6 @@ export async function deleteComment(
         user: {
           omit: {
             id: true,
-            password: true,
             createdAt: true,
             updatedAt: true,
           },

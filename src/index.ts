@@ -18,4 +18,20 @@ const app: Application = express();
 // addCateogiresToDB();
 // updateComments();
 
-initiateApp(app);
+try {
+  initiateApp(app);
+} catch (error) {
+  console.log("Main server error : ", error);
+}
+
+process.on("unhandledRejection", (reason, p) => {
+  console.error("Unhandled Promise Rejection:", reason);
+});
+
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err);
+});
+
+process.on("uncaughtExceptionMonitor", (err) => {
+  console.error("Uncaught Exception (Monitor):", err);
+});

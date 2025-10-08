@@ -7,10 +7,23 @@ import express from "express";
 import { MainAppName } from "./utils/constants/MainAppName.js";
 import { connectRedis } from "./services/redisClient.js";
 import { RateLimit } from "./middlewares/RateLimit.js";
+import { clerkWebhookHandler } from "./utils/clerkWebhookHandler.js";
 
 export async function initiateApp(app: Application) {
+  const baseURL = `/${MainAppName}`;
+  const port = process.env.PORT || 5000;
+
+  //// Clerk webhook endpoint
+  app.post(
+    `${baseURL}/webhooks/clerk`,
+    express.raw({ type: "application/json" }),
+    clerkWebhookHandler
+  );
+
   app.use(express.json());
   app.use(morgan("dev"));
+  app.set("trust proxy", true);
+
   app.use(
     cors({
       origin: "http://localhost:3000",
@@ -18,18 +31,15 @@ export async function initiateApp(app: Application) {
       credentials: true,
     })
   );
-  app.set("trust proxy", true);
 
   await connectRedis();
 
-  const baseURL = `/${MainAppName}`;
-  const port = process.env.PORT || 5000;
+  app.use(RateLimit());
 
   app.get("/", (req: Request, res: Response) => {
     return res.send(`Hello ${MainAppName}!!`);
   });
 
-  app.use(RateLimit());
   app.use(`${baseURL}/posts`, routes.postsRouter);
   app.use(`${baseURL}/comments`, routes.commentsRouter);
   app.use(`${baseURL}/categories`, routes.categoriesRouter);

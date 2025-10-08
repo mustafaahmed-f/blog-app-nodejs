@@ -28,7 +28,6 @@ export async function addComment(
         user: {
           omit: {
             id: true,
-            password: true,
             createdAt: true,
             updatedAt: true,
           },
