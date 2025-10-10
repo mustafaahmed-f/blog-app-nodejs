@@ -25,7 +25,7 @@ router.get("/getPost/:slug", getSinglePost);
 router.get("/search", searchPost);
 router.get("/getPostsWithFilter", getPostsWithFilter);
 router.get("/getFeaturedPosts", getFeaturedPosts);
-router.post("/incViews/:slug", oneCallPerIpMiddleware(""), incViews);
+router.put("/incViews/:slug", oneCallPerIpMiddleware(""), incViews);
 
 //========================================================================================
 //================================ Auth routes ===========================================

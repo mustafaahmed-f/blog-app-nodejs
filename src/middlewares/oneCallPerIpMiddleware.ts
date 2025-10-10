@@ -5,6 +5,7 @@ export function oneCallPerIpMiddleware(s: string) {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       let ip = req.ip;
+      console.log("IP:", ip);
       let postSlug = req.params.slug?.toString();
       if (!postSlug) {
         return res.status(400).json({ error: "Post slug is required." });

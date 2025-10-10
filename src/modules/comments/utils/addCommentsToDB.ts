@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker";
 import { prisma } from "../../../services/prismaClient.js";
 
-const userEmail = "mostafa@gmail.com";
-const postSlug = "tutis-adiuvo-vir-admitto";
+const userEmail = "mostafafikry97@gmail.com";
+const postSlug = "First-post-after-auth-two-mustafaahmed97";
 
 export async function addCommentsToDB(count: number) {
   const commentsData = Array.from({ length: count }).map((_, i) => {

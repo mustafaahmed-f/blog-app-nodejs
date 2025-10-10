@@ -34,7 +34,7 @@ export function RateLimit() {
       if (!results) return next(new Error("Redis transaction failed"));
 
       //TODO : after using k6 tool to test load , edit the rate limit
-      //// Limit 5 requests per minute:
+      //// Limit 100 requests per minute:
       const count = Number(results?.[2]);
       if (count >= 100) {
         return next(new Error("Reached request limit !!"));
