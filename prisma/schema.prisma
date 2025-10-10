@@ -16,6 +16,7 @@ model User {
   lastName  String
   userName  String    @unique
   email     String    @unique
+  img       String    @default("")
   posts     Post[]
   Comment   Comment[]
   Likes     Likes[]

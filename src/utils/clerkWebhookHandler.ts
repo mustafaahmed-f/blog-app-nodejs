@@ -35,8 +35,14 @@ export async function clerkWebhookHandler(
 
     switch (event.type) {
       case "user.created": {
-        const { id, email_addresses, first_name, last_name, username } =
-          event.data;
+        const {
+          id,
+          email_addresses,
+          first_name,
+          last_name,
+          username,
+          image_url,
+        } = event.data;
         let email_address = email_addresses[0].email_address;
         let result = await prisma.user.create({
           data: {
@@ -45,6 +51,7 @@ export async function clerkWebhookHandler(
             lastName: last_name ?? "",
             userName: username ?? "",
             clerkId: id,
+            img: image_url,
           },
         });
         if (!result) {
@@ -55,8 +62,14 @@ export async function clerkWebhookHandler(
         break;
       }
       case "user.updated": {
-        const { id, email_addresses, first_name, last_name, username } =
-          event.data;
+        const {
+          id,
+          email_addresses,
+          first_name,
+          last_name,
+          username,
+          image_url,
+        } = event.data;
         let email_address = email_addresses[0].email_address;
         let result = await prisma.user.update({
           where: {
@@ -68,6 +81,7 @@ export async function clerkWebhookHandler(
             lastName: last_name ?? "",
             userName: username ?? "",
             clerkId: id,
+            img: image_url,
           },
         });
         if (!result) {
