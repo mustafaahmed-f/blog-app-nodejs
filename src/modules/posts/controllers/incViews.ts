@@ -25,6 +25,8 @@ export async function incViews(
       },
     });
 
+    //todo : check featured posts in redis
+
     return res.status(200).json(
       getJsonResponse({
         message: getSuccessMsg("Post", "has", "updated"),

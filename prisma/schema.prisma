@@ -51,9 +51,9 @@ model Post {
 model Likes {
   id        String @id @default(cuid())
   userEmail String
-  user      User   @relation(fields: [userEmail], references: [email])
+  user      User   @relation(fields: [userEmail], references: [email], onDelete: Cascade)
   postSlug  String
-  post      Post   @relation(fields: [postSlug], references: [slug])
+  post      Post   @relation(fields: [postSlug], references: [slug], onDelete: Cascade)
 
   @@unique([userEmail, postSlug])
 }
@@ -65,9 +65,9 @@ model Comment {
   isEdited  Boolean  @default(false)
   desc      String
   userEmail String
-  user      User     @relation(fields: [userEmail], references: [email])
+  user      User     @relation(fields: [userEmail], references: [email], onDelete: Cascade, onUpdate: Cascade)
   postSlug  String
-  post      Post     @relation(fields: [postSlug], references: [slug])
+  post      Post     @relation(fields: [postSlug], references: [slug], onDelete: Cascade)
 
   @@index([postSlug])
 }

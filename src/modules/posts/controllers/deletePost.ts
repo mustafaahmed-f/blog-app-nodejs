@@ -23,6 +23,7 @@ export async function deletePost(
     const userEmail = user?.email ?? "";
 
     const postSlug: string = req.params.slug;
+    console.log("Post slug:", postSlug);
 
     const deletedPost = await prisma.post.delete({
       where: {
