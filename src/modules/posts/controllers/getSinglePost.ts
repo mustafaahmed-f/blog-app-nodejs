@@ -31,9 +31,7 @@ export async function getSinglePost(
       where: {
         slug: postSlug,
       },
-      omit: {
-        id: true,
-      },
+
       include: {
         tags: {
           omit: {

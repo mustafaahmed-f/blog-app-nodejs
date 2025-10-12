@@ -7,13 +7,14 @@ export function oneCallPerIpMiddleware(s: string) {
       let ip = req.ip;
       console.log("IP:", ip);
       let postSlug = req.params.slug?.toString();
+      let postId = req.query.postId?.toString();
       if (!postSlug) {
         return res.status(400).json({ error: "Post slug is required." });
       }
 
       const redis = redisClientInstance();
       let viewKey = await redis.setNX(
-        `${process.env.VIEW_KEY_PREFIX}_${ip}_${postSlug}`,
+        `${process.env.VIEW_KEY_PREFIX}_${ip}_${postId || postSlug}`,
         "true"
       );
       if (!viewKey) {

@@ -5,6 +5,7 @@ import { handlePrismaError } from "../../../utils/helperMethods/handlePrismaErro
 import { prisma } from "../../../services/prismaClient.js";
 import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
 import { getSuccessMsg } from "../../../utils/helperMethods/generateSuccessMsg.js";
+import { getAuth } from "@clerk/express";
 
 type newComment = z.infer<typeof addCommentSchema>;
 export async function addComment(
@@ -13,15 +14,24 @@ export async function addComment(
   next: NextFunction
 ) {
   try {
-    const comment: newComment = req.body;
+    const { userId } = getAuth(req);
+    if (!userId) throw new Error("UserId from clerk is not found!!");
+    const user = await prisma.user.findUnique({
+      where: {
+        clerkId: userId,
+      },
+    });
+    if (!user) throw new Error("User not found");
+
     const postSlug = req.query.postSlug?.toString();
     if (!postSlug) return next(new Error("Post slug is required."));
-    //Todo : use email add from req.user after using clerk:
-    const userEmail = "mostafa@gmail.com";
+
+    const comment: newComment = req.body;
+
     const newComment = await prisma.comment.create({
       data: {
         desc: comment.desc,
-        userEmail,
+        userEmail: user.email,
         postSlug,
       },
       include: {

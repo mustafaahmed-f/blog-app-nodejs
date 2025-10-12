@@ -3,6 +3,7 @@ import { prisma } from "../../../services/prismaClient.js";
 import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
 import { getSuccessMsg } from "../../../utils/helperMethods/generateSuccessMsg.js";
 import { handlePrismaError } from "../../../utils/helperMethods/handlePrismaError.js";
+import { updateFeaturedPosts } from "../utils/updateFeaturedPosts.js";
 
 export async function incViews(
   req: Request,
@@ -20,12 +21,12 @@ export async function incViews(
       where: {
         slug: postSlug,
       },
-      omit: {
-        id: true,
-      },
     });
 
-    //todo : check featured posts in redis
+    const updateFeaturedPostsResult = await updateFeaturedPosts(modifiedPost);
+    if (!updateFeaturedPostsResult.success) {
+      throw new Error("Failed to update featured posts");
+    }
 
     return res.status(200).json(
       getJsonResponse({

@@ -7,6 +7,7 @@ import { deleteComment } from "./controllers/deleteComment.js";
 import { getComments } from "./controllers/getComments.js";
 import { checkAuth } from "../../middlewares/checkAuth.js";
 import { clerkMiddleware } from "@clerk/express";
+import { addCommentSchema } from "./validations/addComment.validation.js";
 
 const router: Router = Router();
 
@@ -18,7 +19,12 @@ router.get("/getComments", getComments);
 
 router.use(clerkMiddleware());
 
-router.post("/addComment", checkAuth(), addComment);
+router.post(
+  "/addComment",
+  validationMiddleware(addCommentSchema),
+  checkAuth(),
+  addComment
+);
 router.put(
   "/updateComment/:id",
   checkAuth(),
