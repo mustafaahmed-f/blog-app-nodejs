@@ -21,7 +21,7 @@ import { addPostSchema } from "./validations/addPost.validation.js";
 const router: Router = Router();
 
 router.get("/getPosts", getPosts);
-router.get("/getPost/:slug", getSinglePost);
+
 router.get("/search", searchPost);
 router.get("/getPostsWithFilter", getPostsWithFilter);
 router.get("/getFeaturedPosts", getFeaturedPosts);
@@ -33,13 +33,16 @@ router.put("/incViews/:slug", oneCallPerIpMiddleware(""), incViews);
 
 router.use(clerkMiddleware());
 
+//// This route need userEmail if it is logged in but doesn't required auth
+router.get("/getPost/:slug", getSinglePost);
+
 router.post(
   "/uploadPostImg",
   checkAuth(),
   uploadFile(fileTypeValidation.image).single("image"),
   uploadPostImg
 );
-router.post("/toggleLike", toggleLike);
+router.put("/toggleLike", toggleLike);
 router.post(
   "/addPost",
   checkAuth(),

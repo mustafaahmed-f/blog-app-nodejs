@@ -3,6 +3,7 @@ import { handlePrismaError } from "../../../utils/helperMethods/handlePrismaErro
 import { prisma } from "../../../services/prismaClient.js";
 import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
 import { getSuccessMsg } from "../../../utils/helperMethods/generateSuccessMsg.js";
+import { getAuth } from "@clerk/express";
 
 export async function deletePost(
   req: Request,
@@ -10,11 +11,23 @@ export async function deletePost(
   next: NextFunction
 ) {
   try {
+    const { userId } = getAuth(req);
+    if (!userId) throw new Error("UserId from clerk is not found!!");
+    const user = await prisma.user.findUnique({
+      where: {
+        clerkId: userId,
+      },
+    });
+    if (!user) throw new Error("User not found");
+
+    const userEmail = user?.email ?? "";
+
     const postSlug: string = req.params.slug;
 
     const deletedPost = await prisma.post.delete({
       where: {
         slug: postSlug,
+        userEmail,
       },
       omit: {
         id: true,

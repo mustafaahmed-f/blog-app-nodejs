@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { handlePrismaError } from "../../../utils/helperMethods/handlePrismaError.js";
 import { prisma } from "../../../services/prismaClient.js";
 import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
+import { getAuth } from "@clerk/express";
 
 export async function toggleLike(
   req: Request,
@@ -9,8 +10,17 @@ export async function toggleLike(
   next: NextFunction
 ) {
   try {
-    //Todo : use email and userName from req.user after using clerk:
-    const userEmail = "mostafa@gmail.com";
+    const { userId } = getAuth(req);
+    if (!userId) throw new Error("UserId from clerk is not found!!");
+    const user = await prisma.user.findUnique({
+      where: {
+        clerkId: userId,
+      },
+    });
+    if (!user) throw new Error("User not found");
+
+    const userEmail = user?.email ?? "";
+
     const postSlug = req.query.postSlug?.toString();
 
     if (!postSlug) return next(new Error("Post slug is required."));

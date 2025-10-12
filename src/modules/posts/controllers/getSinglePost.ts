@@ -4,6 +4,7 @@ import { prisma } from "../../../services/prismaClient.js";
 import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
 import { getSuccessMsg } from "../../../utils/helperMethods/generateSuccessMsg.js";
 import { handlePrismaError } from "../../../utils/helperMethods/handlePrismaError.js";
+import { getAuth } from "@clerk/express";
 
 export async function getSinglePost(
   req: Request,
@@ -11,10 +12,20 @@ export async function getSinglePost(
   next: NextFunction
 ) {
   try {
+    const { userId } = getAuth(req);
+    let user: any = null;
+    user =
+      userId &&
+      (await prisma.user.findUnique({
+        where: {
+          clerkId: userId,
+        },
+      }));
+
+    const userEmail = user?.email ?? "";
+
     const postSlug = req.params.slug;
     if (!postSlug) return next(new Error("Post slug is required."));
-    //todo : try to get userEmail using clerk;
-    const userEmail = req.query.userEmail?.toString();
     let userLikedPost: any = null;
     const result = await prisma.post.findUnique({
       where: {

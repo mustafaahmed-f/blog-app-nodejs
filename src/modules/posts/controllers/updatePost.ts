@@ -67,6 +67,7 @@ export async function updatePost(
     const updatedPost = await prisma.post.update({
       where: {
         slug: postSlug,
+        userEmail: user.email,
       },
       data: {
         ...post,
