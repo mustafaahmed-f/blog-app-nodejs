@@ -23,7 +23,7 @@ export async function addPostsToDB(count: number = 10) {
   try {
     // fetch all tags from DB to randomly attach them
     const allTags = await prisma.tag.findMany();
-    const tagIds = allTags.map((tag) => tag.id);
+    const tagIds = allTags.map((tag: any) => tag.id);
 
     for (let i = 0; i < count; i++) {
       const title = faker.lorem.words(4);

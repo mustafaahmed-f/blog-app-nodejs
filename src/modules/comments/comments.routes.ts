@@ -1,12 +1,11 @@
+import { clerkMiddleware } from "@clerk/express";
 import { Router } from "express";
-import { addComment } from "./controllers/addComment.js";
+import { checkAuth } from "../../middlewares/checkAuth.js";
 import { validationMiddleware } from "../../middlewares/validationMiddleware.js";
-import { updateCommentSchema } from "./validations/updateComment.validation.js";
-import { updateComment } from "./controllers/updateComment.js";
+import { addComment } from "./controllers/addComment.js";
 import { deleteComment } from "./controllers/deleteComment.js";
 import { getComments } from "./controllers/getComments.js";
-import { checkAuth } from "../../middlewares/checkAuth.js";
-import { clerkMiddleware } from "@clerk/express";
+import { updateComment } from "./controllers/updateComment.js";
 import { addCommentSchema } from "./validations/addComment.validation.js";
 
 const router: Router = Router();
@@ -28,7 +27,7 @@ router.post(
 router.put(
   "/updateComment/:id",
   checkAuth(),
-  validationMiddleware(updateCommentSchema),
+  validationMiddleware(addCommentSchema),
   updateComment
 );
 router.delete("/deleteComment/:id", checkAuth(), deleteComment);

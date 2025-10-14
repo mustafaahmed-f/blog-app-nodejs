@@ -7,7 +7,7 @@ export async function assignRandomImages() {
 
     // Loop through posts and update each with a random image URL
     await Promise.all(
-      posts.map((post, index) =>
+      posts.map((post: any, index: number) =>
         prisma.post.update({
           where: { id: post.id },
           data: {

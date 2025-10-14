@@ -1,34 +1,40 @@
+import { getAuth } from "@clerk/express";
 import { NextFunction, Request, Response } from "express";
 import z from "zod";
-import { updateCommentSchema } from "../validations/updateComment.validation.js";
-import { handlePrismaError } from "../../../utils/helperMethods/handlePrismaError.js";
 import { prisma } from "../../../services/prismaClient.js";
-import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
 import { getSuccessMsg } from "../../../utils/helperMethods/generateSuccessMsg.js";
+import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
+import { handlePrismaError } from "../../../utils/helperMethods/handlePrismaError.js";
+import { addCommentSchema } from "../validations/addComment.validation.js";
 
-type updatedComment = z.infer<typeof updateCommentSchema>;
+type updatedComment = z.infer<typeof addCommentSchema>;
 export async function updateComment(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   try {
+    const { userId } = getAuth(req);
+    if (!userId) throw new Error("UserId from clerk is not found!!");
+    const user = await prisma.user.findUnique({
+      where: {
+        clerkId: userId,
+      },
+    });
+    if (!user) throw new Error("User not found");
+
     const comment: updatedComment = req.body;
     const commentId = req.params.id;
+
     const postSlug = req.query.postSlug?.toString();
     if (!postSlug) return next(new Error("Post slug is required."));
-    //Todo : use email add from req.user after using clerk:
-    const userEmail = "mostafa@gmail.com";
-
-    if (!comment.desc?.length)
-      return next(new Error("Comment can't be empty !!"));
 
     const result = await prisma.comment.update({
       data: comment,
       where: {
         postSlug,
         id: commentId,
-        userEmail,
+        userEmail: user.email,
       },
       include: {
         user: {

@@ -4,7 +4,7 @@ export async function updateComments() {
   const comments = await prisma.comment.findMany();
 
   await Promise.all(
-    comments.map((item, i) => {
+    comments.map((item: any, i: number) => {
       return prisma.comment.update({
         where: { id: item.id },
         data: {

@@ -4,7 +4,7 @@ export function handlePrismaError(error: any): {
   status: number;
   message: string;
 } {
-  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+  if (error instanceof (Prisma as any).PrismaClientKnownRequestError) {
     switch (error.code) {
       case "P2002":
         return {
@@ -30,7 +30,7 @@ export function handlePrismaError(error: any): {
     }
   }
 
-  if (error instanceof Prisma.PrismaClientValidationError) {
+  if (error instanceof (Prisma as any).PrismaClientValidationError) {
     return { status: 400, message: `Invalid input data :  ${error}` };
   }
 

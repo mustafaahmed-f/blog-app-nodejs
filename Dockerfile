@@ -9,15 +9,17 @@ RUN npm install
 COPY . .
 RUN npx prisma generate
 CMD ["npm","run","local:watch"]
-EXPOSE 3000
+EXPOSE 5001
 
 FROM base AS builder
 
+WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm install
 COPY . .
-RUN npm run build
 RUN npx prisma generate
+RUN npm run build
+
 # Remove dev dependencies to slim the build before copying
 RUN npm prune --production
 
@@ -29,4 +31,4 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 
 CMD ["npm","run","prod"]
-EXPOSE 5000
+EXPOSE 5001

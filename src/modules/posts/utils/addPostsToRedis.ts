@@ -8,7 +8,7 @@ export async function addFeaturedPostsToRedis() {
     const redis = redisClientInstance();
 
     await Promise.all(
-      posts.map((post) => {
+      posts.map((post: any) => {
         return redis.zAdd(featuredPostsSetName, [
           {
             value: post.id.toString(),
@@ -19,8 +19,8 @@ export async function addFeaturedPostsToRedis() {
     );
 
     const sortedViews = posts
-      .map((post) => post.id.toString())
-      .sort((a, b) => parseInt(b) - parseInt(a));
+      .map((post: any) => post.id.toString())
+      .sort((a: any, b: any) => parseInt(b) - parseInt(a));
     console.log("Sorted views:", sortedViews);
 
     await redis.zRemRangeByRank(featuredPostsSetName, 0, -11);

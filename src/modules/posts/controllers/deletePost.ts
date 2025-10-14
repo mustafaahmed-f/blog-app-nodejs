@@ -48,7 +48,7 @@ export async function deletePost(
           },
           {
             id: {
-              in: deletedPost.tags.map((tag) => tag.id ?? []),
+              in: deletedPost.tags.map((tag: any) => tag.id ?? []),
             },
           },
         ],
