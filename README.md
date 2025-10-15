@@ -4,6 +4,13 @@ A robust and scalable blog backend built with **Node.js**, **TypeScript**, **MyS
 
 ---
 
+## Frontend Repository
+
+The frontend for this project can be found here:  
+[https://github.com/mustafaahmed-f/blog-next-app](https://github.com/mustafaahmed-f/blog-next-app)
+
+---
+
 ## Table of Contents
 
 - [Features](#features)
