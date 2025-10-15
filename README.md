@@ -148,7 +148,10 @@ This app is fully containerized for easy deployment.
 
 ## Database Diagram
 
-_Add your database diagram here (ERD, schema, etc.)_
+<img
+        src="https://res.cloudinary.com/dvvmu40wx/image/upload/v1760553147/Public%20images/Blog_app_DB_schema_fds3fm.png"
+        alt="Blog app DB design"
+/>
 
 ---
 
