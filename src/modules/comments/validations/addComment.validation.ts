@@ -8,5 +8,5 @@ export const addCommentSchema = z.object({
   desc: z
     .string()
     .min(1, requiredFieldMsg("description"))
-    .max(250, maxLengthMsg(250)),
+    .max(600, maxLengthMsg(600)),
 });

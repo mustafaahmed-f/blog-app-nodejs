@@ -64,7 +64,7 @@ model Comment {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   isEdited  Boolean  @default(false)
-  desc      String
+  desc      String   @db.Text
   userEmail String
   user      User     @relation(fields: [userEmail], references: [email], onDelete: Cascade, onUpdate: Cascade)
   postSlug  String
