@@ -24,31 +24,40 @@ model User {
 }
 
 model Post {
-  id           String    @id @default(cuid()) @map("_id")
-  draftId      String?   @unique @default(cuid())
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @default(now())
-  isEdited     Boolean   @default(false)
-  slug         String    @unique
+  id           String        @id @default(cuid()) @map("_id")
+  draftId      String?       @unique @default(cuid())
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @default(now())
+  isEdited     Boolean       @default(false)
+  slug         String        @unique
   title        String
-  delta        String    @db.Text
-  html         String    @db.Text
-  desc         String    @db.Text
+  delta        String        @db.Text
+  html         String        @db.Text
+  desc         String        @db.Text
   img          String?
-  img_publicId String?   @default("")
-  views        Int       @default(0)
+  img_publicId String?       @default("")
+  views        Int           @default(0)
   categoryId   String
-  cat          Category  @relation(fields: [categoryId], references: [id])
+  cat          Category      @relation(fields: [categoryId], references: [id])
   userEmail    String
-  user         User      @relation(fields: [userEmail], references: [email])
+  user         User          @relation(fields: [userEmail], references: [email])
   comments     Comment[]
   tags         Tag[]
   Likes        Likes[]
+  post_images  post_images[]
 
   @@unique([userEmail, title])
   @@index([userEmail])
   @@index([categoryId])
   @@fulltext([title, desc])
+}
+
+model post_images {
+  id        String @id @default(cuid())
+  postId    String
+  post      Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  url       String
+  public_id String @default("")
 }
 
 model Likes {
