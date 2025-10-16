@@ -8,6 +8,8 @@ import { addPostSchema } from "../validations/addPost.validation.js";
 import { JSDOM } from "jsdom";
 import createDOMPurify from "dompurify";
 import { AuthObject, clerkClient, getAuth } from "@clerk/express";
+import cloudinary from "../../../services/cloudinary.js";
+import { uploadToCloudinary } from "../../../utils/helperMethods/uploadToCloudinary.js";
 
 type newPost = z.infer<typeof addPostSchema>;
 
@@ -42,16 +44,27 @@ export async function addPost(req: Request, res: Response, next: NextFunction) {
     const clean = DOMPurify.sanitize(newPost.html);
 
     //// Get image :
-    const image = req?.file?.buffer;
-    //todo : upload it on s3
+    let secure_url = "",
+      public_id = "";
 
-    const fakeImgURL =
-      "https://storage.googleapis.com/fir-auth-1c3bc.appspot.com/1694290122808-71AL1tTRosL._SL1500_.jpg";
+    const folder = `${process.env.CLOUDINARY_FOLDER}/Posts/${newPost.draftId}`;
+
+    try {
+      const uploadResponse = await uploadToCloudinary(req.file.buffer, folder);
+
+      secure_url = uploadResponse.secure_url;
+      public_id = uploadResponse.public_id;
+    } catch (err) {
+      //todo : add a try and catch for uploading the image and in catch use rabbitMQ to publish a message to retry uploading
+      console.error("Cloudinary upload failed:", err);
+      return next(new Error("Failed to upload image to Cloudinary."));
+    }
 
     const result = await prisma.post.create({
       data: {
         ...newPost,
-        img: fakeImgURL, // todo : add img url after uploading it to amazon s3
+        img: secure_url, // todo : add img url after uploading it to amazon s3,
+        img_publicId: public_id,
         slug: slug,
         userEmail,
         html: clean,
@@ -87,6 +100,7 @@ export async function addPost(req: Request, res: Response, next: NextFunction) {
       })
     );
   } catch (error) {
+    console.log(error);
     return next(new Error(handlePrismaError(error).message));
   }
 }

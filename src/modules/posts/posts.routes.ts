@@ -39,7 +39,7 @@ router.get("/getPost/:slug", getSinglePost);
 router.post(
   "/uploadPostImg",
   checkAuth(),
-  uploadFile(fileTypeValidation.image).single("image"),
+  uploadFile(fileTypeValidation.image).single("img"),
   uploadPostImg
 );
 router.put("/toggleLike", toggleLike);
