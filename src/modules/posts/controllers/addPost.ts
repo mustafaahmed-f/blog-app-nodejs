@@ -25,6 +25,7 @@ export async function addPost(req: Request, res: Response, next: NextFunction) {
     if (!req.file) {
       return res.status(400).json({ message: "Image is required" });
     }
+
     const newPost: newPost = req.body;
     const tagsArr = newPost.tags
       .split(",")

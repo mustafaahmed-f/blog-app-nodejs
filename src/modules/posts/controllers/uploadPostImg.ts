@@ -22,3 +22,34 @@ export async function uploadPostImg(
     return next(error);
   }
 }
+
+/*
+
+// After successful Cloudinary upload:
+const uploadedImage = {
+  secure_url,
+  public_id,
+  uploadedAt: Date.now(),
+};
+
+// Save temporarily to Redis (expires after 1 hour)
+await redisClient.setex(
+  `temp:uploads:${userId}:${postDraftId}`,
+  3600, // 1 hour
+  JSON.stringify(uploadedImage)
+);
+
+
+await redisClient.del(`temp:uploads:${userId}:${postDraftId}`);
+
+
+const keys = await redisClient.keys("temp:uploads:*");
+for (const key of keys) {
+  const data = JSON.parse(await redisClient.get(key));
+  if (Date.now() - data.uploadedAt > 3600000) { // older than 1 hour
+    await cloudinary.uploader.destroy(data.public_id);
+    await redisClient.del(key);
+  }
+}
+
+*/
