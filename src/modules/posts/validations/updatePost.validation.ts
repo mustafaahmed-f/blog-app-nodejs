@@ -5,7 +5,17 @@ import {
   requiredFieldMsg,
 } from "../../../utils/helperMethods/validationErrorMessages.js";
 
-export const addPostSchema = z.object({
+const validFields = [
+  "title",
+  "desc",
+  "tags",
+  "html",
+  "delta",
+  "categoryId",
+  "img",
+] as const;
+
+export const updatePostSchema = z.object({
   title: z
     .string()
     .min(1, requiredFieldMsg("title"))
@@ -33,4 +43,14 @@ export const addPostSchema = z.object({
   categoryId: z.string().min(1, requiredFieldMsg("categoryId")),
 
   draftId: z.string().min(1, requiredFieldMsg("draftId")),
+
+  dirtyFields: z
+    .string()
+    .min(1, "dirtyFields is required")
+    .refine((val) => {
+      const arr = val.split(",").map((s) => s.trim());
+
+      // Must not contain invalid fields
+      return arr.every((field: any) => validFields.includes(field));
+    }, "dirtyFields contains invalid fields"),
 });

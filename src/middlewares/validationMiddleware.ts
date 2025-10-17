@@ -4,10 +4,15 @@ import z from "zod";
 export function validationMiddleware(validaitonSchema: z.ZodType) {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log(req.body);
       const result = validaitonSchema.safeParse(req.body);
       if (!result.success) {
-        (req as any).validationErrorArr = z.treeifyError(result.error);
+        const formattedErrors = result.error.issues.map((issue) => ({
+          field: issue.path.join("."),
+          message: issue.message,
+        }));
+
+        (req as any).validationErrorArr = formattedErrors;
+
         return next(new Error(""));
       } else {
         return next();

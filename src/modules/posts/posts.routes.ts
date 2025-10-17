@@ -17,6 +17,7 @@ import { toggleLike } from "./controllers/toggleLike.js";
 import { updatePost } from "./controllers/updatePost.js";
 import { uploadPostImg } from "./controllers/uploadPostImg.js";
 import { addPostSchema } from "./validations/addPost.validation.js";
+import { updatePostSchema } from "./validations/updatePost.validation.js";
 
 const router: Router = Router();
 
@@ -54,7 +55,7 @@ router.put(
   "/updatePost/:slug",
   checkAuth(),
   uploadFile(fileTypeValidation.image).single("img"),
-  validationMiddleware(addPostSchema),
+  validationMiddleware(updatePostSchema),
   updatePost
 );
 router.delete("/deletePost/:slug", checkAuth(), deletePost);

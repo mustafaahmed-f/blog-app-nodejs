@@ -79,8 +79,6 @@ export async function getComments(
         : comments[comments.length - 1].id === lastComment?.id;
     const hasMore = !isLastCursor;
 
-    // console.log("Last comment:", lastComment);
-
     return res.status(201).json(
       getJsonResponse({
         message: getSuccessMsg("Comment", "have", "fetched"),

@@ -11,7 +11,7 @@ export const globalErrorHandler = (
     if ((req as any).validationErrorArr) {
       return res.status(err.cause || 500).json({
         message: "Validation Error",
-        error: (req as any).validationErrorArr,
+        error: (req as any).validationErrorArr.map((err: any) => err.message),
       });
     }
     return res
