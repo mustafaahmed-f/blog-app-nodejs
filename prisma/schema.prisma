@@ -53,11 +53,11 @@ model Post {
 }
 
 model post_images {
-  id        String @id @default(cuid())
-  postId    String
-  post      Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
-  url       String
-  public_id String @default("")
+  id          String @id @default(cuid())
+  postDraftId String
+  post        Post   @relation(fields: [postDraftId], references: [draftId], onDelete: Cascade)
+  url         String
+  public_id   String @default("")
 }
 
 model Likes {

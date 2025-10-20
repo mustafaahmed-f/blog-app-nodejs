@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
+import { uploadToCloudinary } from "../../../utils/helperMethods/uploadToCloudinary.js";
+import { redisClientInstance } from "../../../services/redisClient.js";
 
 export async function uploadPostImg(
   req: Request,
@@ -7,49 +9,41 @@ export async function uploadPostImg(
   next: NextFunction
 ) {
   try {
+    let redis = redisClientInstance();
+
     //todo : use RabbitMQ to remove image if post is not published.
-    const image = req?.file?.buffer;
-    const fakeImgURL =
-      "https://storage.googleapis.com/fir-auth-1c3bc.appspot.com/1694290122808-71AL1tTRosL._SL1500_.jpg";
+    if (!req.file) {
+      return next(new Error("Image is required"));
+    }
+
+    const draftId = req.query.draftId?.toString();
+    console.log("Draft id : ", draftId);
+    if (!draftId) return next(new Error("DraftId is required."));
+
+    const folder = `${process.env.CLOUDINARY_FOLDER}/Posts/${draftId}`;
+
+    const uploadResponse = await uploadToCloudinary(req.file?.buffer, folder);
+
+    let secure_url = uploadResponse.secure_url;
+    let public_id = uploadResponse.public_id;
+
+    const redisKey = `${process.env.TEMP_IMG_UPLOADS_PREFIX}:${draftId}:${public_id}`;
+
+    console.log("Redis key : ", redisKey);
+    await redis.setEx(
+      redisKey,
+      60 * 60 * 2,
+      // 60,
+      JSON.stringify({ secure_url, public_id })
+    );
 
     return res.status(201).json(
       getJsonResponse({
         message: "Image uploaded successfully",
-        data: fakeImgURL,
+        data: secure_url,
       })
     );
   } catch (error) {
     return next(error);
   }
 }
-
-/*
-
-// After successful Cloudinary upload:
-const uploadedImage = {
-  secure_url,
-  public_id,
-  uploadedAt: Date.now(),
-};
-
-// Save temporarily to Redis (expires after 1 hour)
-await redisClient.setex(
-  `temp:uploads:${userId}:${postDraftId}`,
-  3600, // 1 hour
-  JSON.stringify(uploadedImage)
-);
-
-
-await redisClient.del(`temp:uploads:${userId}:${postDraftId}`);
-
-
-const keys = await redisClient.keys("temp:uploads:*");
-for (const key of keys) {
-  const data = JSON.parse(await redisClient.get(key));
-  if (Date.now() - data.uploadedAt > 3600000) { // older than 1 hour
-    await cloudinary.uploader.destroy(data.public_id);
-    await redisClient.del(key);
-  }
-}
-
-*/

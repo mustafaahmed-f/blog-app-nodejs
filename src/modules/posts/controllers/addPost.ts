@@ -10,6 +10,9 @@ import createDOMPurify from "dompurify";
 import { AuthObject, clerkClient, getAuth } from "@clerk/express";
 import cloudinary from "../../../services/cloudinary.js";
 import { uploadToCloudinary } from "../../../utils/helperMethods/uploadToCloudinary.js";
+import { redisClientInstance } from "../../../services/redisClient.js";
+import { getKeysFromRedis } from "../../../utils/helperMethods/getKeysFromRedis.js";
+import { uploadPostImages } from "../utils/uploadPostImages.js";
 
 type newPost = z.infer<typeof addPostSchema>;
 
@@ -43,7 +46,7 @@ export async function addPost(req: Request, res: Response, next: NextFunction) {
     const DOMPurify = createDOMPurify(window as any);
     const clean = DOMPurify.sanitize(newPost.html);
 
-    //// Get image :
+    //// Uploading main image :
     let secure_url = "",
       public_id = "";
 
@@ -60,10 +63,11 @@ export async function addPost(req: Request, res: Response, next: NextFunction) {
       return next(new Error("Failed to upload image to Cloudinary."));
     }
 
+    //// Creating new post:
     const result = await prisma.post.create({
       data: {
         ...newPost,
-        img: secure_url, // todo : add img url after uploading it to amazon s3,
+        img: secure_url,
         img_publicId: public_id,
         slug: slug,
         userEmail,
@@ -92,6 +96,12 @@ export async function addPost(req: Request, res: Response, next: NextFunction) {
         },
       },
     });
+
+    //// uploading post images :
+    //todo : for looping over redis keys and adding post images, we will use rabbitMQ latter to allow faster respose in case of
+    //todo : large number of images uploaded.
+    //// loop over keys in redis to check if post has content images and add them to post_images table
+    await uploadPostImages(newPost.draftId);
 
     return res.json(
       getJsonResponse({

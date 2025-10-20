@@ -92,14 +92,12 @@ export async function updatePost(
 
     if (req.file && req.file?.buffer) {
       try {
-        //todo : remove old img from cloudinary:
-        await cloudinary.uploader.destroy(
-          checkPostExistence.img_publicId as string
-        );
-        const uploadResponse = await uploadToCloudinary(
-          req.file.buffer,
-          folder
-        );
+        const [_, uploadResponse] = await Promise.all([
+          cloudinary.uploader.destroy(
+            checkPostExistence.img_publicId as string
+          ),
+          uploadToCloudinary(req.file.buffer, folder),
+        ]);
 
         secure_url = uploadResponse.secure_url;
         public_id = uploadResponse.public_id;

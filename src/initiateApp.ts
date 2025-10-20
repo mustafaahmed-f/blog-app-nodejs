@@ -8,6 +8,7 @@ import { MainAppName } from "./utils/constants/MainAppName.js";
 import { connectRedis } from "./services/redisClient.js";
 import { RateLimit } from "./middlewares/RateLimit.js";
 import { clerkWebhookHandler } from "./utils/clerkWebhookHandler.js";
+import { initRedisExpirationListener } from "./utils/helperMethods/RedisKeyExpirationListener.js";
 
 export async function initiateApp(app: Application) {
   const baseURL = `/${MainAppName}`;
@@ -33,6 +34,8 @@ export async function initiateApp(app: Application) {
   );
 
   await connectRedis();
+
+  initRedisExpirationListener();
 
   app.use(RateLimit());
 

@@ -4,7 +4,7 @@ let redisClient: ReturnType<typeof createClient>;
 
 export async function connectRedis() {
   redisClient = createClient({
-    url: "redis://redis:6379",
+    url: process.env.REDIS_URL,
   });
 
   redisClient.on("connect", () => console.log("Connected to Redis!"));
