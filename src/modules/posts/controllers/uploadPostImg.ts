@@ -17,7 +17,7 @@ export async function uploadPostImg(
     }
 
     const draftId = req.query.draftId?.toString();
-    console.log("Draft id : ", draftId);
+
     if (!draftId) return next(new Error("DraftId is required."));
 
     const folder = `${process.env.CLOUDINARY_FOLDER}/Posts/${draftId}`;
@@ -29,7 +29,6 @@ export async function uploadPostImg(
 
     const redisKey = `${process.env.TEMP_IMG_UPLOADS_PREFIX}:${draftId}:${public_id}`;
 
-    console.log("Redis key : ", redisKey);
     await redis.setEx(
       redisKey,
       60 * 60 * 2,

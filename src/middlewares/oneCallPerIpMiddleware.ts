@@ -5,7 +5,7 @@ export function oneCallPerIpMiddleware(s: string) {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       let ip = req.ip;
-      console.log("IP:", ip);
+
       let postSlug = req.params.slug?.toString();
       let postId = req.query.postId?.toString();
       if (!postSlug) {

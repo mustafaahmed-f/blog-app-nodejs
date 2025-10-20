@@ -100,7 +100,7 @@ export async function addPost(req: Request, res: Response, next: NextFunction) {
     //// uploading post images :
     //todo : for looping over redis keys and adding post images, we will use rabbitMQ latter to allow faster respose in case of
     //todo : large number of images uploaded.
-    //// loop over keys in redis to check if post has content images and add them to post_images table
+
     await uploadPostImages(newPost.draftId);
 
     return res.json(

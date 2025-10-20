@@ -10,6 +10,7 @@ import { handlePrismaError } from "../../../utils/helperMethods/handlePrismaErro
 import { updatePostSchema } from "../validations/updatePost.validation.js";
 import { uploadToCloudinary } from "../../../utils/helperMethods/uploadToCloudinary.js";
 import cloudinary from "../../../services/cloudinary.js";
+import { uploadPostImages } from "../utils/uploadPostImages.js";
 
 type updatedPost = z.infer<typeof updatePostSchema>;
 
@@ -19,7 +20,6 @@ export async function updatePost(
   next: NextFunction
 ) {
   try {
-    console.log("Here 1");
     const { userId } = getAuth(req);
     if (!userId) throw new Error("UserId from clerk is not found!!");
 
@@ -106,6 +106,11 @@ export async function updatePost(
         console.error("Cloudinary upload failed:", err);
         return next(new Error("Failed to upload image to Cloudinary."));
       }
+    }
+
+    //// Check if there are new uploaded imgs:
+    if (dirtyFieldsArr.includes("html")) {
+      await uploadPostImages(post.draftId);
     }
 
     const updatedPost = await prisma.post.update({
