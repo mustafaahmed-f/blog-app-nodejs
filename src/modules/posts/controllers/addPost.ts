@@ -1,18 +1,17 @@
+import { getAuth } from "@clerk/express";
+import createDOMPurify from "dompurify";
 import { NextFunction, Request, Response } from "express";
+import { JSDOM } from "jsdom";
 import z from "zod";
 import { prisma } from "../../../services/prismaClient.js";
 import { getSuccessMsg } from "../../../utils/helperMethods/generateSuccessMsg.js";
 import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
 import { handlePrismaError } from "../../../utils/helperMethods/handlePrismaError.js";
-import { addPostSchema } from "../validations/addPost.validation.js";
-import { JSDOM } from "jsdom";
-import createDOMPurify from "dompurify";
-import { AuthObject, clerkClient, getAuth } from "@clerk/express";
-import cloudinary from "../../../services/cloudinary.js";
 import { uploadToCloudinary } from "../../../utils/helperMethods/uploadToCloudinary.js";
-import { redisClientInstance } from "../../../services/redisClient.js";
-import { getKeysFromRedis } from "../../../utils/helperMethods/getKeysFromRedis.js";
 import { uploadPostImages } from "../utils/uploadPostImages.js";
+import { addPostSchema } from "../validations/addPost.validation.js";
+import { removeUploadedImages } from "../utils/removeUploadedImages.js";
+import { removeImgKeysFromRedis } from "../utils/removeImgKeysFromRedis.js";
 
 type newPost = z.infer<typeof addPostSchema>;
 
@@ -32,6 +31,7 @@ export async function addPost(req: Request, res: Response, next: NextFunction) {
     }
 
     const newPost: newPost = req.body;
+
     const tagsArr = newPost.tags
       .split(",")
       .map((tag) => tag.trim().toLowerCase());
@@ -63,15 +63,32 @@ export async function addPost(req: Request, res: Response, next: NextFunction) {
       return next(new Error("Failed to upload image to Cloudinary."));
     }
 
+    //// Remove removed photos by user
+    const removedImages: string[] = JSON.parse(newPost.deletedIds);
+    if (removedImages.length > 0) {
+      await removeUploadedImages(removedImages);
+      await removeImgKeysFromRedis(removedImages, newPost.draftId);
+    }
+
     //// Creating new post:
     const result = await prisma.post.create({
       data: {
-        ...newPost,
+        draftId: newPost.draftId,
+
+        title: newPost.title,
+
+        categoryId: newPost.categoryId,
+        slug: slug,
+
         img: secure_url,
         img_publicId: public_id,
-        slug: slug,
+
         userEmail,
+
+        delta: newPost.delta,
+        desc: newPost.desc,
         html: clean,
+
         tags: {
           connectOrCreate: tagsArr.map((tag) => {
             return {

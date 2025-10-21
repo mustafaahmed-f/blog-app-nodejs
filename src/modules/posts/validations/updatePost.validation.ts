@@ -44,6 +44,8 @@ export const updatePostSchema = z.object({
 
   draftId: z.string().min(1, requiredFieldMsg("draftId")),
 
+  deletedIds: z.string(),
+
   dirtyFields: z
     .string()
     .min(1, "dirtyFields is required")

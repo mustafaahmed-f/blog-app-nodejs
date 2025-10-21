@@ -33,4 +33,6 @@ export const addPostSchema = z.object({
   categoryId: z.string().min(1, requiredFieldMsg("categoryId")),
 
   draftId: z.string().min(1, requiredFieldMsg("draftId")),
+
+  deletedIds: z.string(),
 });

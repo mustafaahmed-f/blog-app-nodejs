@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
 import { uploadToCloudinary } from "../../../utils/helperMethods/uploadToCloudinary.js";
 import { redisClientInstance } from "../../../services/redisClient.js";
+import cloudinary from "../../../services/cloudinary.js";
 
 export async function uploadPostImg(
   req: Request,
@@ -22,6 +23,15 @@ export async function uploadPostImg(
 
     const folder = `${process.env.CLOUDINARY_FOLDER}/Posts/${draftId}`;
 
+    const { resources: postImages } = await cloudinary.api.resources({
+      type: "upload",
+      prefix: folder + "/",
+      max_results: 11,
+    });
+
+    if (postImages.length >= 10)
+      return next(new Error("You can only upload 10 images."));
+
     const uploadResponse = await uploadToCloudinary(req.file?.buffer, folder);
 
     let secure_url = uploadResponse.secure_url;
@@ -39,7 +49,7 @@ export async function uploadPostImg(
     return res.status(201).json(
       getJsonResponse({
         message: "Image uploaded successfully",
-        data: secure_url,
+        data: { secure_url, public_id },
       })
     );
   } catch (error) {

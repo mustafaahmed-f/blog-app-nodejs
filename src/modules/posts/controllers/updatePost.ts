@@ -11,6 +11,8 @@ import { updatePostSchema } from "../validations/updatePost.validation.js";
 import { uploadToCloudinary } from "../../../utils/helperMethods/uploadToCloudinary.js";
 import cloudinary from "../../../services/cloudinary.js";
 import { uploadPostImages } from "../utils/uploadPostImages.js";
+import { removeUploadedImages } from "../utils/removeUploadedImages.js";
+import { removeImgKeysFromRedis } from "../utils/removeImgKeysFromRedis.js";
 
 type updatedPost = z.infer<typeof updatePostSchema>;
 
@@ -110,6 +112,12 @@ export async function updatePost(
 
     //// Check if there are new uploaded imgs:
     if (dirtyFieldsArr.includes("html")) {
+      //// Remove removed photos by user
+      const removedImages: string[] = JSON.parse(post.deletedIds);
+      if (removedImages.length > 0) {
+        await removeUploadedImages(removedImages);
+        await removeImgKeysFromRedis(removedImages, post.draftId);
+      }
       await uploadPostImages(post.draftId);
     }
 
