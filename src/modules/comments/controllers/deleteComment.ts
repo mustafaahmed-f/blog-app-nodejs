@@ -4,6 +4,7 @@ import { prisma } from "../../../services/prismaClient.js";
 import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
 import { getSuccessMsg } from "../../../utils/helperMethods/generateSuccessMsg.js";
 import { getAuth } from "@clerk/express";
+import { checkIdAndUser } from "../../../utils/helperMethods/checkIdAndUser.js";
 
 export async function deleteComment(
   req: Request,
@@ -11,14 +12,7 @@ export async function deleteComment(
   next: NextFunction
 ) {
   try {
-    const { userId } = getAuth(req);
-    if (!userId) throw new Error("UserId from clerk is not found!!");
-    const user = await prisma.user.findUnique({
-      where: {
-        clerkId: userId,
-      },
-    });
-    if (!user) throw new Error("User not found");
+    const user = await checkIdAndUser(req);
 
     const commentId = req.params.id;
 

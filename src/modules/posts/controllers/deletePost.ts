@@ -5,6 +5,7 @@ import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js
 import { getSuccessMsg } from "../../../utils/helperMethods/generateSuccessMsg.js";
 import { getAuth } from "@clerk/express";
 import cloudinary from "../../../services/cloudinary.js";
+import { checkIdAndUser } from "../../../utils/helperMethods/checkIdAndUser.js";
 
 export async function deletePost(
   req: Request,
@@ -12,14 +13,7 @@ export async function deletePost(
   next: NextFunction
 ) {
   try {
-    const { userId } = getAuth(req);
-    if (!userId) throw new Error("UserId from clerk is not found!!");
-    const user = await prisma.user.findUnique({
-      where: {
-        clerkId: userId,
-      },
-    });
-    if (!user) throw new Error("User not found");
+    const user = await checkIdAndUser(req);
 
     const userEmail = user?.email ?? "";
 
@@ -36,10 +30,14 @@ export async function deletePost(
 
     if (!post) return next(new Error("Post not found."));
 
-    //// Delete img and remove folder
+    //// Remove all post's images
     const folder = `${process.env.CLOUDINARY_FOLDER}/Posts/${post.draftId}`;
-    await cloudinary.uploader.destroy(post.img_publicId as string);
+
+    await cloudinary.api.delete_resources_by_prefix(folder);
+    console.log(`Deleted images in ${folder}`);
+
     await cloudinary.api.delete_folder(folder);
+    console.log(`Folder ${folder} deleted successfully`);
 
     const deletedPost = await prisma.post.delete({
       where: {

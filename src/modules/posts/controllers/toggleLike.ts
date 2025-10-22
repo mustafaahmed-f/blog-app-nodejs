@@ -3,6 +3,7 @@ import { handlePrismaError } from "../../../utils/helperMethods/handlePrismaErro
 import { prisma } from "../../../services/prismaClient.js";
 import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
 import { getAuth } from "@clerk/express";
+import { checkIdAndUser } from "../../../utils/helperMethods/checkIdAndUser.js";
 
 export async function toggleLike(
   req: Request,
@@ -10,14 +11,7 @@ export async function toggleLike(
   next: NextFunction
 ) {
   try {
-    const { userId } = getAuth(req);
-    if (!userId) throw new Error("UserId from clerk is not found!!");
-    const user = await prisma.user.findUnique({
-      where: {
-        clerkId: userId,
-      },
-    });
-    if (!user) throw new Error("User not found");
+    const user = await checkIdAndUser(req);
 
     const userEmail = user?.email ?? "";
 

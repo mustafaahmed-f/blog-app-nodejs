@@ -13,6 +13,7 @@ import cloudinary from "../../../services/cloudinary.js";
 import { uploadPostImages } from "../utils/uploadPostImages.js";
 import { removeUploadedImages } from "../utils/removeUploadedImages.js";
 import { removeImgKeysFromRedis } from "../utils/removeImgKeysFromRedis.js";
+import { checkIdAndUser } from "../../../utils/helperMethods/checkIdAndUser.js";
 
 type updatedPost = z.infer<typeof updatePostSchema>;
 
@@ -22,15 +23,7 @@ export async function updatePost(
   next: NextFunction
 ) {
   try {
-    const { userId } = getAuth(req);
-    if (!userId) throw new Error("UserId from clerk is not found!!");
-
-    const user = await prisma.user.findUnique({
-      where: {
-        clerkId: userId,
-      },
-    });
-    if (!user) throw new Error("User not found");
+    const user = await checkIdAndUser(req);
 
     const post: updatedPost = req.body;
     const postSlug = req.params.slug;

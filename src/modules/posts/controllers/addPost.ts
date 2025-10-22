@@ -12,19 +12,13 @@ import { uploadPostImages } from "../utils/uploadPostImages.js";
 import { addPostSchema } from "../validations/addPost.validation.js";
 import { removeUploadedImages } from "../utils/removeUploadedImages.js";
 import { removeImgKeysFromRedis } from "../utils/removeImgKeysFromRedis.js";
+import { checkIdAndUser } from "../../../utils/helperMethods/checkIdAndUser.js";
 
 type newPost = z.infer<typeof addPostSchema>;
 
 export async function addPost(req: Request, res: Response, next: NextFunction) {
   try {
-    const { userId } = getAuth(req);
-    if (!userId) throw new Error("UserId from clerk is not found!!");
-    const user = await prisma.user.findUnique({
-      where: {
-        clerkId: userId,
-      },
-    });
-    if (!user) throw new Error("User not found");
+    const user = await checkIdAndUser(req);
 
     if (!req.file) {
       return res.status(400).json({ message: "Image is required" });

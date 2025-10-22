@@ -6,6 +6,7 @@ import { prisma } from "../../../services/prismaClient.js";
 import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
 import { getSuccessMsg } from "../../../utils/helperMethods/generateSuccessMsg.js";
 import { getAuth } from "@clerk/express";
+import { checkIdAndUser } from "../../../utils/helperMethods/checkIdAndUser.js";
 
 type newComment = z.infer<typeof addCommentSchema>;
 export async function addComment(
@@ -14,14 +15,7 @@ export async function addComment(
   next: NextFunction
 ) {
   try {
-    const { userId } = getAuth(req);
-    if (!userId) throw new Error("UserId from clerk is not found!!");
-    const user = await prisma.user.findUnique({
-      where: {
-        clerkId: userId,
-      },
-    });
-    if (!user) throw new Error("User not found");
+    const user = await checkIdAndUser(req);
 
     const postSlug = req.query.postSlug?.toString();
     if (!postSlug) return next(new Error("Post slug is required."));
