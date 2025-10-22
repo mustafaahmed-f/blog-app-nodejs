@@ -33,11 +33,21 @@ export async function deletePost(
     //// Remove all post's images
     const folder = `${process.env.CLOUDINARY_FOLDER}/Posts/${post.draftId}`;
 
-    await cloudinary.api.delete_resources_by_prefix(folder);
-    console.log(`Deleted images in ${folder}`);
+    const { resources } = await cloudinary.api.resources({
+      type: "upload",
+      prefix: folder + "/", // ensure trailing slash
+      max_results: 1, // just need to check existence
+    });
 
-    await cloudinary.api.delete_folder(folder);
-    console.log(`Folder ${folder} deleted successfully`);
+    if (resources.length > 0) {
+      await cloudinary.api.delete_resources_by_prefix(folder);
+      console.log(`Deleted images in ${folder}`);
+
+      await cloudinary.api.delete_folder(folder);
+      console.log(`Folder ${folder} deleted successfully`);
+    }
+
+    //todo: check if post exists in featured posts sorted set in redis and so we update set.
 
     const deletedPost = await prisma.post.delete({
       where: {
