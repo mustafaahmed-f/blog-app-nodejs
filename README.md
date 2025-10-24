@@ -15,6 +15,7 @@ The frontend for this project can be found here:
 
 - [Features](#features)
 - [Technologies Used](#technologies-used)
+- [Uploading Post Images](#uploading-post-images)
 - [Getting Started](#getting-started)
 - [Docker Usage](#docker-usage)
 - [Database Diagram](#database-diagram)
@@ -83,6 +84,23 @@ The frontend for this project can be found here:
 - **nodemon**: Automatically restarts the server on code changes.
 - **ts-node**: Runs TypeScript files directly.
 - **@types/\***: TypeScript type definitions for various libraries.
+
+---
+
+## Uploading Post Images
+
+When a user inserts an image through the Quill editor we use a custom toolbar handler (quillImageHandler) that uploads the image to the backend and sets a loader state to true so the UI shows a spinner and blocks user actions while the upload is in progress. The backend uploads the file to Cloudinary and responds with a secure_url and a public_id.
+
+To handle temporary uploads and automatic cleanup, the backend creates a Redis key with a TTL and associated expiration logic. If the post is never published or the user abandons the editor (closes the page, cancels, etc.), the Redis TTL triggers server-side cleanup: the uploaded image(s) are removed from Cloudinary (and the folder removed if empty). When a post is successfully published or edited, the temporary Redis key is deleted so the TTL cleanup does not run.
+
+On the frontend we use a CustomImageBlot (a class that extends Quill’s image blot) so the editor can embed an object { secure_url, public_id } instead of a plain src string. CustomImageBlot:
+
+- create(): accepts an object and sets both src (secure_url) and a custom attribute data-public-id (public_id) on the image node.
+- value(): returns the object { secure_url, public_id } for persistence.
+
+For deletions, we listen to Quill's text-change events and compare the previous delta with the current delta. If an image has been removed (detected by comparing public_ids extracted from both deltas), we add those public_ids to a deletedIds state. When the user publishes or updates the post, deletedIds are sent with the post payload to the backend, which deletes the images in parallel (Promise.allSettled) from Cloudinary.
+
+This flow keeps image uploads responsive, prevents orphaned files, and ensures published posts retain their images while temporary uploads are automatically cleaned up.
 
 ---
 
