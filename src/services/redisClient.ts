@@ -4,7 +4,10 @@ let redisClient: ReturnType<typeof createClient>;
 
 export async function connectRedis() {
   redisClient = createClient({
-    url: process.env.REDIS_URL,
+    url:
+      process.env.NODE_ENV === "dev"
+        ? process.env.REDIS_URL
+        : process.env.REDIS_UPSTASH_URL,
   });
 
   redisClient.on("connect", () => console.log("Connected to Redis!"));
