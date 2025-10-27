@@ -11,7 +11,7 @@ RUN npx prisma generate
 CMD ["npm","run","local:watch"]
 EXPOSE 5001
 
-FROM base AS builder
+FROM node:22.16.0-alpine AS builder
 
 WORKDIR /app
 COPY package.json package-lock.json* ./
