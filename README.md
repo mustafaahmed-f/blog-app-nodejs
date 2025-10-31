@@ -188,7 +188,7 @@ Main Endpoint: [https://bh5rsluyme.execute-api.us-east-1.amazonaws.com/](https:/
 
 ## API Collections
 
-_API documentation and Postman collections will be provided here._
+Link : [https://documenter.getpostman.com/view/25990827/2sB3WpQLBZ](https://documenter.getpostman.com/view/25990827/2sB3WpQLBZ)
 
 ---
 
