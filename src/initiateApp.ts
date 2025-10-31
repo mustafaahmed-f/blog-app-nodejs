@@ -32,6 +32,7 @@ export async function initiateApp(app: Application) {
           ? process.env.FRONTEND_LOCAL_URL
           : process.env.FRONTEND_VERCEL_URL,
       allowedHeaders: ["Content-Type", "Authorization"],
+      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // allow all methods you need
       credentials: true,
     })
   );
