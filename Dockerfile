@@ -18,7 +18,9 @@ COPY package.json package-lock.json* ./
 RUN npm install
 COPY . ./
 RUN npx prisma generate
-RUN npm run build
+
+# Increase Node memory limit to 4 GB during build
+RUN NODE_OPTIONS="--max-old-space-size=4096" npm run build
 
 # Remove dev dependencies to slim the build before copying
 RUN npm prune --production
