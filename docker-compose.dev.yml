@@ -15,5 +15,23 @@ services:
     command: npm run local:watch
     environment:
       - debug=true
+      - NODE_ENV=dev
+      - REDIS_URL=redis://redis:6379
     networks:
       - blog-app-network
+    depends_on:
+      - redis
+
+  redis:
+    image: redis
+    container_name: my-redis-blog-app
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_blog_app_data:/data
+    networks:
+      - blog-app-network
+
+volumes:
+  redis_blog_app_data:

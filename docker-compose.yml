@@ -34,21 +34,9 @@ services:
     networks:
       - blog-app-network
 
-  redis:
-    image: redis
-    container_name: my-redis-blog-app
-    restart: always
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_blog_app_data:/data
-    networks:
-      - blog-app-network
-
 volumes:
   blog-app-volume:
   mysql_data:
-  redis_blog_app_data:
 
 networks:
   blog-app-network:
