@@ -27,7 +27,10 @@ export async function initiateApp(app: Application) {
 
   app.use(
     cors({
-      origin: "http://localhost:3000",
+      origin:
+        process.env.NODE_ENV === "dev"
+          ? process.env.FRONTEND_LOCAL_URL
+          : process.env.FRONTEND_VERCEL_URL,
       allowedHeaders: ["Content-Type", "Authorization"],
       credentials: true,
     })

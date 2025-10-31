@@ -3,10 +3,10 @@ FROM node:22.16.0 AS base
 FROM base AS development
 
 WORKDIR /app
-COPY package*.json .
+COPY package*.json ./
 RUN npm install
 # Generate Prisma Client inside the container
-COPY . .
+COPY . ./
 RUN npx prisma generate
 CMD ["npm","run","local:watch"]
 EXPOSE 5001
@@ -16,7 +16,7 @@ FROM node:22.16.0-alpine AS builder
 WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm install
-COPY . .
+COPY . ./
 RUN npx prisma generate
 RUN npm run build
 

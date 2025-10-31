@@ -15,8 +15,6 @@ services:
     command: npm run local:watch
     environment:
       - debug=true
-      - NODE_ENV=dev
-      - REDIS_URL=redis://redis:6379
     networks:
       - blog-app-network
     depends_on:
