@@ -3,11 +3,15 @@ import { v2 as cloudinary } from "cloudinary";
 import { checkCloudinaryFolderEmpty } from "./checkCloudinaryFolderEmpty.js";
 
 export async function initRedisExpirationListener() {
+  const redisURL =
+    process.env.NODE_ENV === "dev"
+      ? process.env.REDIS_URL
+      : process.env.REDIS_UPSTASH_URL;
   //// Create a Redis client for events
-  const subscriber = new Redis(process.env.REDIS_URL as string);
+  const subscriber = new Redis(redisURL as string);
 
   //// Ensure Redis is configured to emit expiration events
-  const configClient = new Redis(process.env.REDIS_URL as string);
+  const configClient = new Redis(redisURL as string);
 
   //// "SET" : We’re setting a Redis configuration value.
   //// "notify-keyspace-events" : The specific config option we’re modifying — it controls which events Redis will publish to the notification channels.
