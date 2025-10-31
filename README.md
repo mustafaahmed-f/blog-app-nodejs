@@ -182,7 +182,7 @@ This app is fully containerized for easy deployment.
 
 ## Deployment
 
-_Instructions for deploying to production will be added here._
+Main Endpoint: [https://bh5rsluyme.execute-api.us-east-1.amazonaws.com/](https://bh5rsluyme.execute-api.us-east-1.amazonaws.com/)
 
 ---
 
