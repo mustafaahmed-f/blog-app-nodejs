@@ -42,13 +42,13 @@ export async function initiateApp(app: Application) {
 
   app.use(RateLimit());
 
-  app.get("/", (req: Request, res: Response) => {
-    return res.send(`Hello ${MainAppName}!!`);
-  });
-
   app.use(`${baseURL}/posts`, routes.postsRouter);
   app.use(`${baseURL}/comments`, routes.commentsRouter);
   app.use(`${baseURL}/categories`, routes.categoriesRouter);
+
+  app.get("/", (req: Request, res: Response) => {
+    return res.send(`Hello ${MainAppName}!!`);
+  });
 
   app.use("/{*any}", (req: Request, res: Response) => {
     res.status(404).json({ error: "In-valid routing .. " });
