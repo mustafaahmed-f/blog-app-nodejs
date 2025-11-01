@@ -8,11 +8,12 @@ export function RateLimit() {
       req.socket.remoteAddress;
 
     let identifier = req.headers["x-client-id"] || req.cookies.client_id || ip;
-
+    console.log("client id from header : ", req.headers["x-client-id"]);
+    console.log("Identified : ", identifier);
     const redis = redisClientInstance();
     const currentTimeWithSeconds = Math.floor(new Date().getTime() / 1000);
-    const rateLimitSortedSet = `${process.env.RATE_LIMIT_SORTED_SET}_${ip}`;
     const rateLimitKey = `${identifier}:${currentTimeWithSeconds}`;
+    const rateLimitSortedSet = `${process.env.RATE_LIMIT_SORTED_SET}_${identifier}`;
 
     const tx = redis.multi(); //// Creating transaction
 

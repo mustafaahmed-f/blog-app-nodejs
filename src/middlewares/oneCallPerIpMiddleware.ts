@@ -8,13 +8,9 @@ export function oneCallPerIpMiddleware(s: string) {
         req.headers["x-forwarded-for"]?.toString().split(",")[0].trim() ||
         req.socket.remoteAddress;
 
-      console.log("Ip : ", ip);
-
       let identifier =
         req.headers["x-client-id"] || req.cookies.client_id || ip;
 
-      console.log("identifier : ", identifier);
-      console.log("client id header : ", req.headers["x-client-id"]);
       let postSlug = req.params.slug?.toString();
       let postId = req.query.postId?.toString();
       if (!postSlug) {
