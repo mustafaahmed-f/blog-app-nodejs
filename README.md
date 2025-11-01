@@ -184,7 +184,7 @@ This app is fully containerized for easy deployment.
 
 Deployed on AWS EC2 with API Gateway.
 
-Main Endpoint: [https://bh5rsluyme.execute-api.us-east-1.amazonaws.com/](https://bh5rsluyme.execute-api.us-east-1.amazonaws.com/)
+Main Endpoint: [https://bh5rsluyme.execute-api.us-east-1.amazonaws.com/blog/](https://bh5rsluyme.execute-api.us-east-1.amazonaws.com/blog/)
 
 ---
 
