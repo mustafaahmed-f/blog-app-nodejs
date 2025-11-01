@@ -12,6 +12,7 @@ export function oneCallPerIpMiddleware(s: string) {
 
       let identifier = req.cookies.client_id || ip;
 
+      console.log("identifier : ", identifier);
       let postSlug = req.params.slug?.toString();
       let postId = req.query.postId?.toString();
       if (!postSlug) {
