@@ -8,6 +8,10 @@ export function oneCallPerIpMiddleware(s: string) {
         req.headers["x-forwarded-for"]?.toString().split(",")[0].trim() ||
         req.socket.remoteAddress;
 
+      console.log("Ip : ", ip);
+
+      let identifier = req.cookies.client_id || ip;
+
       let postSlug = req.params.slug?.toString();
       let postId = req.query.postId?.toString();
       if (!postSlug) {
@@ -15,9 +19,16 @@ export function oneCallPerIpMiddleware(s: string) {
       }
 
       const redis = redisClientInstance();
-      let viewKey = await redis.setNX(
-        `${process.env.VIEW_KEY_PREFIX}_${ip}_${postId || postSlug}`,
-        "true"
+      let viewKey = await redis.set(
+        `${process.env.VIEW_KEY_PREFIX}_${identifier}_${postId || postSlug}`,
+        "true",
+        {
+          condition: "NX",
+          expiration: {
+            type: "EX",
+            value: 60 * 60 * 24 * 15, //* 15 days
+          },
+        }
       );
       if (!viewKey) {
         return res.status(429).json({ error: "You already viewed this post" });

@@ -7,10 +7,12 @@ export function RateLimit() {
       req.headers["x-forwarded-for"]?.toString().split(",")[0].trim() ||
       req.socket.remoteAddress;
 
+    let identifier = req.cookies.client_id || ip;
+
     const redis = redisClientInstance();
     const currentTimeWithSeconds = Math.floor(new Date().getTime() / 1000);
     const rateLimitSortedSet = `${process.env.RATE_LIMIT_SORTED_SET}_${ip}`;
-    const rateLimitKey = `${ip}:${currentTimeWithSeconds}`;
+    const rateLimitKey = `${identifier}:${currentTimeWithSeconds}`;
 
     const tx = redis.multi(); //// Creating transaction
 

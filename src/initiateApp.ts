@@ -9,6 +9,7 @@ import { connectRedis } from "./services/redisClient.js";
 import { RateLimit } from "./middlewares/RateLimit.js";
 import { clerkWebhookHandler } from "./utils/clerkWebhookHandler.js";
 import { initRedisExpirationListener } from "./utils/helperMethods/RedisKeyExpirationListener.js";
+import cookieParser from "cookie-parser";
 
 export async function initiateApp(app: Application) {
   const baseURL = `/${MainAppName}`;
@@ -22,17 +23,28 @@ export async function initiateApp(app: Application) {
   );
 
   app.use(express.json());
+
+  app.use(cookieParser());
+
   app.use(morgan("dev"));
-  app.set("trust proxy", "loopback, linklocal, uniquelocal");
+  app.set("trust proxy", true);
+
+  const allowedOrigins = [
+    "http://localhost:3000",
+    "https://blog-next-app-by-mustafa.vercel.app/",
+    "https://blog-next-app-by-mustafa.vercel.app",
+  ];
 
   app.use(
     cors({
-      origin: "*",
+      origin: allowedOrigins,
       allowedHeaders: ["Content-Type", "Authorization"],
       methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // allow all methods you need
       credentials: true,
     })
   );
+
+  // app.options("*", cors());
 
   await connectRedis();
 
