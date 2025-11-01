@@ -3,7 +3,9 @@ import { redisClientInstance } from "../services/redisClient.js";
 
 export function RateLimit() {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const ip = req.ip;
+    const ip =
+      req.headers["x-forwarded-for"]?.toString().split(",")[0].trim() ||
+      req.socket.remoteAddress;
 
     const redis = redisClientInstance();
     const currentTimeWithSeconds = Math.floor(new Date().getTime() / 1000);

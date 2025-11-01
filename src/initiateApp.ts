@@ -23,7 +23,7 @@ export async function initiateApp(app: Application) {
 
   app.use(express.json());
   app.use(morgan("dev"));
-  app.set("trust proxy", true);
+  app.set("trust proxy", "loopback, linklocal, uniquelocal");
 
   app.use(
     cors({
