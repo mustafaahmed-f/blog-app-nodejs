@@ -27,10 +27,7 @@ export async function initiateApp(app: Application) {
 
   app.use(
     cors({
-      origin:
-        process.env.NODE_ENV === "dev"
-          ? process.env.FRONTEND_LOCAL_URL
-          : process.env.FRONTEND_VERCEL_URL,
+      origin: "*",
       allowedHeaders: ["Content-Type", "Authorization"],
       methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // allow all methods you need
       credentials: true,
