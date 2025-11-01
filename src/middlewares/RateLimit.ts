@@ -7,7 +7,7 @@ export function RateLimit() {
       req.headers["x-forwarded-for"]?.toString().split(",")[0].trim() ||
       req.socket.remoteAddress;
 
-    let identifier = req.cookies.client_id || ip;
+    let identifier = req.headers["x-client-id"] || req.cookies.client_id || ip;
 
     const redis = redisClientInstance();
     const currentTimeWithSeconds = Math.floor(new Date().getTime() / 1000);

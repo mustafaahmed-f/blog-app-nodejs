@@ -38,7 +38,7 @@ export async function initiateApp(app: Application) {
   app.use(
     cors({
       origin: allowedOrigins,
-      allowedHeaders: ["Content-Type", "Authorization"],
+      allowedHeaders: ["Content-Type", "Authorization", "x-client-id"],
       methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // allow all methods you need
       credentials: true,
     })
