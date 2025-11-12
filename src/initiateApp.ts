@@ -69,3 +69,38 @@ export async function initiateApp(app: Application) {
     console.log(`Server is running on port ${process.env.PORT}`)
   );
 }
+
+//====================================================================
+//================ what to test ====================================
+//====================================================================
+
+/*
+
+| Dependency                       | Should You Mock?            | Why                                                        |
+| -------------------------------- | --------------------------- | ---------------------------------------------------------- |
+| **Prisma**                       | ✅ In unit/integration tests | Avoid hitting real DB; test faster and isolate logic       |
+| **Redis**                        | ✅ In most tests             | Don’t rely on external service; can fake cache behavior    |
+| **Clerk SDK / Webhook**          | ✅                           | External API — mock HTTP calls and payloads                |
+| **Express app.listen()**         | ✅                           | Don’t actually start a server; test app instance only      |
+| **Environment variables (.env)** | Sometimes                   | Use a `.env.test` or `vi.stubEnv()`                        |
+| **3rd-party HTTP requests**      | ✅                           | Avoid hitting APIs; use `vi.mock("node-fetch")` or similar |
+| **Logger / morgan**              | ✅ (optional)                | You can suppress console noise during tests                |
+
+*/
+
+//====================================================================
+//================ libraries along side vitest ======================
+//====================================================================
+
+/*
+
+| Purpose                      | Recommended Library                                 | Why                                                       |
+| ---------------------------- | --------------------------------------------------- | --------------------------------------------------------- |
+| **HTTP request simulation**  | `supertest`                                         | To send requests to Express app (no need to start server) |
+| **Mocking Prisma**           | `vitest` built-in mocks OR `prisma-mock` (optional) | Quickly fake Prisma responses                             |
+| **Mocking Redis**            | `ioredis-mock` or manual mock                       | Simulate Redis client behavior                            |
+| **Environment setup**        | `dotenv` or built-in Node support                   | Load test env variables                                   |
+| **Code coverage**            | `c8` (Vitest uses it by default)                    | Generate coverage reports                                 |
+| **Data factories / seeding** | `@faker-js/faker`                                   | Generate fake user/post data for E2E tests                |
+
+*/
