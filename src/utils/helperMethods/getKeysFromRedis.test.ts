@@ -1,12 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getKeysFromRedis } from "./getKeysFromRedis.js";
 
-// let { cursorState } = vi.hoisted(() => {
-//   return {
-//     cursorState: "4",
-//   };
-// });
-
 let cursorState = "4";
 const mockRedis = {
   scan: vi.fn(async function (
