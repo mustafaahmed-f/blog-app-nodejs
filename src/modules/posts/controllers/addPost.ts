@@ -125,3 +125,50 @@ export async function addPost(req: Request, res: Response, next: NextFunction) {
     return next(new Error(handlePrismaError(error).message));
   }
 }
+
+/*
+
+📌 Summary of What to Test (Final Checklist)
+*PRE-CONDITIONS
+
+User not authenticated (checkIdAndUser throws)
+
+User authenticated but not found
+
+Missing file → returns 400
+
+*SANITIZATION
+
+HTML sanitized and passed to Prisma
+
+*CLOUDINARY
+
+Successful upload used in prisma data
+
+Upload failure → next(error), stop everything else
+
+*DELETED IMAGES
+
+RemovedImages array > 0 → cleanup functions called
+
+RemovedImages array empty → cleanup NOT called
+
+*PRISMA
+
+Correct slug calculation
+
+Correct fields being passed
+
+Tags mapped to connectOrCreate
+
+Correct returned JSON response
+
+*AFTER CREATION
+
+Calls uploadPostImages(draftId)
+
+*ERROR HANDLING
+
+Prisma error → handled and passed to next()
+
+*/

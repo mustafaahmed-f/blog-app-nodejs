@@ -29,7 +29,7 @@ describe("getKeysFromRedis()", () => {
     expect(mockRedis.scan).toBeCalledTimes(4);
   });
 
-  it("should call scan with three arguments", async () => {
+  it("should call scan with two arguments", async () => {
     await getKeysFromRedis(mockRedis as any, "");
 
     expect(mockRedis.scan.mock.calls[0].length).toBe(2);

@@ -6,6 +6,7 @@ describe("checkIdAndUser()", () => {
   afterEach(() => {
     vi.resetModules();
   });
+
   it("should throw if userId is null or undefined", async () => {
     vi.doMock("@clerk/express", () => ({ getAuth: () => ({ userId: null }) }));
     const { checkIdAndUser } = await import("./checkIdAndUser.js");
