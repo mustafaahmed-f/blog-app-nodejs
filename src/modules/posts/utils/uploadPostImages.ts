@@ -18,7 +18,7 @@ export async function uploadPostImages(draftId: string) {
           if (!imgObj) throw new Error(`Missing Redis data for key: ${key}`);
           return JSON.parse(imgObj);
         } catch (err) {
-          console.error("Error reading Redis key:", key, err);
+          console.error("Error reading Redis key: ", key, err);
           throw err;
         }
       })
@@ -41,7 +41,7 @@ export async function uploadPostImages(draftId: string) {
 
     await redis.del(keys);
   } catch (err) {
-    console.error("uploadPostImages error:", err);
+    console.error("uploadPostImages error : ", err);
     throw err;
   }
 }

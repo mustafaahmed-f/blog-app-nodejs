@@ -17,8 +17,16 @@ describe("checkIdAndUser()", () => {
 
   it("should throw if user is not found", async () => {
     vi.doMock("@clerk/express", () => ({ getAuth: () => ({ userId: 1 }) }));
-    vi.doMock("../../services/prismaClient.js", () =>
-      prismaMock.userMock(null)
+    vi.doMock(
+      "../../services/prismaClient.js",
+      () => prismaMock.userMock(null)
+      /*
+    prisma: {
+      user: {
+        findUnique: () => Promise.resolve(user),
+      },
+    },
+    */
     );
 
     const { checkIdAndUser } = await import("./checkIdAndUser.js");

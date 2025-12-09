@@ -1,18 +1,17 @@
-import { getAuth } from "@clerk/express";
 import createDOMPurify from "dompurify";
 import { NextFunction, Request, Response } from "express";
 import { JSDOM } from "jsdom";
 import z from "zod";
 import { prisma } from "../../../services/prismaClient.js";
+import { checkIdAndUser } from "../../../utils/helperMethods/checkIdAndUser.js";
 import { getSuccessMsg } from "../../../utils/helperMethods/generateSuccessMsg.js";
 import { getJsonResponse } from "../../../utils/helperMethods/getJsonResponse.js";
 import { handlePrismaError } from "../../../utils/helperMethods/handlePrismaError.js";
 import { uploadToCloudinary } from "../../../utils/helperMethods/uploadToCloudinary.js";
+import { removeImgKeysFromRedis } from "../utils/removeImgKeysFromRedis.js";
+import { removeUploadedImages } from "../utils/removeUploadedImages.js";
 import { uploadPostImages } from "../utils/uploadPostImages.js";
 import { addPostSchema } from "../validations/addPost.validation.js";
-import { removeUploadedImages } from "../utils/removeUploadedImages.js";
-import { removeImgKeysFromRedis } from "../utils/removeImgKeysFromRedis.js";
-import { checkIdAndUser } from "../../../utils/helperMethods/checkIdAndUser.js";
 
 type newPost = z.infer<typeof addPostSchema>;
 
