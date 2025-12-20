@@ -5,6 +5,7 @@ FROM base AS development
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
+RUN npm install -g prisma@6.14.0
 # Generate Prisma Client inside the container
 COPY . ./
 RUN npx prisma generate

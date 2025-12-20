@@ -1,15 +1,14 @@
-import { Application, Request, Response } from "express";
-import morgan from "morgan";
-import cors from "cors";
-import { globalErrorHandler } from "./utils/globalErrorHandler.js";
-import * as routes from "./routes.js";
-import express from "express";
-import { MainAppName } from "./utils/constants/MainAppName.js";
-import { connectRedis } from "./services/redisClient.js";
-import { RateLimit } from "./middlewares/RateLimit.js";
-import { clerkWebhookHandler } from "./utils/clerkWebhookHandler.js";
-import { initRedisExpirationListener } from "./utils/helperMethods/RedisKeyExpirationListener.js";
 import cookieParser from "cookie-parser";
+import cors from "cors";
+import express, { Application, Request, Response } from "express";
+import morgan from "morgan";
+import { RateLimit } from "./middlewares/RateLimit.js";
+import * as routes from "./routes.js";
+import { connectRedis } from "./services/redisClient.js";
+import { clerkWebhookHandler } from "./utils/clerkWebhookHandler.js";
+import { MainAppName } from "./utils/constants/MainAppName.js";
+import { globalErrorHandler } from "./utils/globalErrorHandler.js";
+import { initRedisExpirationListener } from "./utils/helperMethods/RedisKeyExpirationListener.js";
 
 export async function initiateApp(app: Application) {
   const baseURL = `/${MainAppName}`;
@@ -44,8 +43,6 @@ export async function initiateApp(app: Application) {
     })
   );
 
-  // app.options("*", cors());
-
   await connectRedis();
 
   initRedisExpirationListener();
@@ -68,6 +65,8 @@ export async function initiateApp(app: Application) {
   app.listen(port, () =>
     console.log(`Server is running on port ${process.env.PORT}`)
   );
+
+  return app;
 }
 
 //====================================================================

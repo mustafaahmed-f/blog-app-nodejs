@@ -100,9 +100,6 @@ describe("uploadPostImages()", () => {
     getKeysFromRedis.mockResolvedValueOnce(["1"]);
     getMock.mockResolvedValueOnce(JSON.stringify({ title: "anything" }));
     createManyMock.mockRejectedValueOnce("Failed to create records !!");
-    // await uploadPostImages(draftId);
-
-    // expect(createManyMock).toHaveBeenCalledTimes(1);
     await expect(uploadPostImages(draftId)).rejects.toEqual(
       "Failed to create records !!"
     );

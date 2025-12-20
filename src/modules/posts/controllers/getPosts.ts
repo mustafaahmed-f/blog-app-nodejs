@@ -15,6 +15,7 @@ export async function getPosts(
     page: parseInt((page as string) ?? "1"),
     size: parseInt((size as string) ?? "10"),
   });
+
   const posts = await prisma.post.findMany({
     take,
     skip,
