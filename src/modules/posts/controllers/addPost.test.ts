@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
+import { addPost } from "./addPost.js";
 
 const {
   checkIdAndUserMock,
@@ -14,7 +15,7 @@ const {
   createPostMock,
   uploadPostImagesMock,
 } = vi.hoisted(() => ({
-  checkIdAndUserMock: vi.fn(),
+  checkIdAndUserMock: vi.fn().mockResolvedValue({}),
   nextMock: vi.fn(),
   reqMock: {
     file: { buffer: {} },
@@ -147,5 +148,11 @@ describe("addPost()", () => {
     vi.clearAllMocks();
   });
 
-  it.skip("should throw an error if checkIdAndUser threw an error", async () => {});
+  it("should throw an error if checkIdAndUser threw an error", async () => {
+    const error = "user is not found !!";
+    checkIdAndUserMock.mockRejectedValueOnce(error);
+    await addPost(reqMock as any, resMock as any, nextMock);
+    expect(nextMock).toHaveBeenCalled();
+    expect(nextMock).toHaveBeenCalledWith(expect.any(Error));
+  });
 });

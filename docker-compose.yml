@@ -9,7 +9,7 @@ services:
       - mysql
 
   mysql:
-    image: mysql
+    image: mysql:8
     container_name: my-mysql-blog-app
     restart: always
     environment:

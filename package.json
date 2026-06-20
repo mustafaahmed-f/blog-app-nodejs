@@ -30,6 +30,7 @@
     "i": "^0.3.7",
     "nodemon": "^3.0.1",
     "npm": "^11.6.1",
+    "prisma": "^7.8.0",
     "supertest": "^7.1.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.1.6",
@@ -38,7 +39,8 @@
   "dependencies": {
     "@clerk/express": "^1.7.36",
     "@faker-js/faker": "^10.0.0",
-    "@prisma/client": "^6.14.0",
+    "@prisma/adapter-mariadb": "^7.8.0",
+    "@prisma/client": "^7.8.0",
     "cloudinary": "^2.7.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",

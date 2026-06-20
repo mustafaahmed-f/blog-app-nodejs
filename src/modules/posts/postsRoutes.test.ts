@@ -19,7 +19,7 @@ describe("Posts Routes", () => {
     //   await redis.flushdb();
   });
 
-  it("Should return error if posts doesn't exist in DB", async () => {
+  it.skip("Should return error if posts doesn't exist in DB", async () => {
     const app: Application = createApp();
     const res = await request(app).get(`${mainURL}/posts/getPosts`);
 

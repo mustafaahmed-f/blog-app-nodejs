@@ -1,6 +1,11 @@
 import dotenv from "dotenv";
 import express, { Application } from "express";
 import { initiateApp } from "./initiateApp.js";
+import { addCateogiresToDB } from "./modules/categories/utils/addCategoriesToDB.js";
+import {
+  addPostsToDB,
+  addQuillPostsToDB,
+} from "./modules/posts/utils/addPostsToDB.js";
 dotenv.config();
 
 const app: Application = express();
@@ -11,6 +16,7 @@ const app: Application = express();
 // assignRandomImages();
 // addCateogiresToDB();
 // updateComments();
+// addQuillPostsToDB(50);
 
 try {
   initiateApp(app);
